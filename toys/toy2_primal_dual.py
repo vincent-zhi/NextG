@@ -44,7 +44,7 @@ import torch.nn.functional as F
 # ==========================================================================
 ROWS = [[r * 6 + c for c in range(6)] for r in range(6)]
 COLS = [[r * 6 + c for r in range(6)] for c in range(6)]
-BOX = [(r // 2) * 3 + (c // 3) for r in range(6) for c in range(6)]
+BOX = [(r // 2) * 2 + (c // 3) for r in range(6) for c in range(6)]
 BOXES = [[i for i in range(36) if BOX[i] == b] for b in range(6)]
 CONSTRAINTS = ROWS + COLS + BOXES  # 18, each with 6 cells
 
@@ -331,7 +331,7 @@ class SATTask:
 
     def violation(self, e):
         B, n, _ = e.shape
-        ev = e.gather(1, self.cv.reshape(B, -1, 1).expand(B, -1, 1)).reshape(B, self.M, 3, 2)
+        ev = e.gather(1, self.cv.reshape(B, -1, 1).expand(B, -1, 2)).reshape(B, self.M, 3, 2)
         pos = ((self.cs + 1) // 2).unsqueeze(-1)
         sat = ev.gather(-1, pos).squeeze(-1)
         return (1.0 - sat).prod(-1, keepdim=True)  # (B,M,1)
@@ -361,7 +361,8 @@ def solve(z, task, T, eta, beta, gamma, lam_max, mode, eps):
         v = task.violation(e)
         nv = v.norm(dim=-1)
         rho = charbonnier(nv, eps)
-        lam = torch.clamp(beta * lam + gamma * rho, 0.0, lam_max)
+        if mode != "primal":  # primal-only keeps lambda identically zero
+            lam = torch.clamp(beta * lam + gamma * rho, 0.0, lam_max)
         with torch.enable_grad():
             ed = e.detach().requires_grad_(True)
             vd = task.violation(ed)
@@ -369,7 +370,7 @@ def solve(z, task, T, eta, beta, gamma, lam_max, mode, eps):
             if mode == "no_zero_lock":
                 obj = ((1.0 + lam.detach()) * nvd).sum()
             else:
-                gate = ((1.0 + lam.detach()) * rho.detach()).unsqueeze(-1)
+                gate = (1.0 + lam.detach()) * rho.detach()   # (B,M)
                 obj = 0.5 * (gate * (vd * vd).sum(-1)).sum()
             g = torch.autograd.grad(obj, ed)[0]
         z = task.clamp_z(z - eta * g.detach())
@@ -387,7 +388,7 @@ class Model(nn.Module):
 
     def forward(self, task, T, args):
         z0 = self.enc(task.x)
-        if T <= 0:
+        if args.mode == "open" or T <= 0:
             return z0, [], z0
         z, Es = solve(z0, task, T, args.eta, args.beta, args.gamma,
                       args.lam_max, args.mode, args.eps)
@@ -472,12 +473,35 @@ def auroc(scores, labels):
 # ==========================================================================
 def make_tasks(args, rng, device):
     if args.dataset == "sudoku":
-        train = build_sudoku_pool(args.n_sol, args.per_sol, (10, 14), rng, False)
-        test = build_sudoku_pool(max(20, args.n_sol // 8), 2, (18, 22), rng, True)
-        tr = [x[0] for x, idx in train if idx % 5 != 0]
-        te = [x[0] for x, idx in test] + [x[0] for x, idx in train if idx % 5 == 0]
-        tr_task = SudokuTask([p for p, s, b in tr], [s for p, s, b in tr], device)
-        te_task = SudokuTask([p for p, s, b in te], [s for p, s, b in te], device)
+        # one solution pool; every 5th solution is held out for OOD.  The two
+        # sides never share a solution grid (mutually exclusive split).
+        sols, seen = [], set()
+        while len(sols) < args.n_sol:
+            s = random_solution(rng)
+            if tuple(s) in seen:
+                continue
+            seen.add(tuple(s))
+            sols.append(s)
+        items = []
+        for idx, s in enumerate(sols):
+            for _ in range(args.per_sol):
+                g, bl = make_puzzle(s, rng.randint(10, 14), rng)
+                items.append(((g, s, bl), idx))
+        train = [x for x, idx in items if idx % 5 != 0]
+        test = []
+        for idx in range(0, len(sols), 5):
+            s = sols[idx]
+            for _ in range(2):
+                got = None
+                for _try in range(30):
+                    g, bl = make_puzzle(s, rng.randint(18, 22), rng)
+                    if bl >= 18 and not naked_singles(g):
+                        got = (g, s, bl)
+                        break
+                if got is not None:
+                    test.append(got)
+        tr_task = SudokuTask([p for p, s, b in train], [s for p, s, b in train], device)
+        te_task = SudokuTask([p for p, s, b in test], [s for p, s, b in test], device)
         return tr_task, te_task
     n_tr = args.sat_n_train
     train = build_sat_pool(n_tr, args.n_sat, rng, non_up=True)
@@ -547,7 +571,7 @@ def smoke():
     # zero-lock: at a satisfied hard assignment the step is exactly zero
     task = SudokuTask([sol], [sol], torch.device("cpu"))
     z = torch.full((1, 36, 6), -30.0)
-    z.scatter_(-1, torch.tensor(sol).view(1, 36, 1), 30.0)
+    z.scatter_(-1, (torch.tensor(sol) - 1).view(1, 36, 1), 30.0)
     z = task.clamp_z(z)
     z2, Es = solve(z, task, 3, 0.3, 0.9, 0.5, 5.0, "full", 1e-3)
     assert (z2 - z).abs().max() < 1e-6, (z2 - z).abs().max()

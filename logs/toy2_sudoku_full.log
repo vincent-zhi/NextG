@@ -1,0 +1,22 @@
+data: train=320 test=28 cells=36 vals=6 M=18 (8.7s)
+[sudoku/full] step     1 loss=1.3226 ce=1.1755 l1=0.389 l3=10.8000 |g|=0.03 (10.1s)
+[sudoku/full] step   100 loss=0.7650 ce=0.6890 l1=0.236 l3=5.1969 |g|=0.18 (28.4s)
+[sudoku/full] step   200 loss=0.7358 ce=0.6549 l1=0.227 l3=5.7750 |g|=0.19 (47.1s)
+[sudoku/full] step   300 loss=0.6587 ce=0.5912 l1=0.195 l3=4.7438 |g|=0.39 (65.3s)
+[sudoku/full] step   400 loss=0.5216 ce=0.4718 l1=0.150 l3=3.4313 |g|=0.27 (84.0s)
+[sudoku/full] step   500 loss=0.3699 ce=0.3330 l1=0.099 l3=2.6312 |g|=0.28 (102.4s)
+[sudoku/full] step   600 loss=0.2796 ce=0.2509 l1=0.064 l3=2.1625 |g|=0.26 (121.1s)
+[sudoku/full] step   700 loss=0.2208 ce=0.1987 l1=0.054 l3=1.6031 |g|=0.27 (141.5s)
+[sudoku/full] step   800 loss=0.1759 ce=0.1614 l1=0.027 l3=1.1031 |g|=0.19 (161.3s)
+[sudoku/full] step   900 loss=0.1197 ce=0.1092 l1=0.011 l3=0.8750 |g|=0.19 (181.0s)
+[sudoku/full] step  1000 loss=0.0957 ce=0.0888 l1=0.008 l3=0.5531 |g|=0.15 (200.6s)
+[sudoku/full] step  1100 loss=0.0753 ce=0.0723 l1=0.001 l3=0.2156 |g|=0.11 (222.0s)
+[sudoku/full] step  1200 loss=0.0630 ce=0.0606 l1=0.001 l3=0.1531 |g|=0.09 (241.9s)
+[sudoku/full] step  1300 loss=0.0510 ce=0.0495 l1=0.001 l3=0.0656 |g|=0.08 (261.6s)
+[sudoku/full] step  1400 loss=0.0408 ce=0.0395 l1=0.000 l3=0.0500 |g|=0.10 (279.6s)
+[sudoku/full] step  1500 loss=0.0407 ce=0.0395 l1=0.000 l3=0.0437 |g|=0.07 (297.0s)
+  T= 8 acc_cells= 47.52% acc_full= 0.00% auroc=1.0 viol=86.90%
+  T=16 acc_cells= 56.27% acc_full= 0.00% auroc=0.9972529411315918 viol=81.55%
+  T=32 acc_cells= 67.66% acc_full= 0.00% auroc=0.9960557222366333 viol=72.22%
+  T=64 acc_cells= 73.43% acc_full= 7.14% auroc=0.9957765340805054 viol=61.51%
+retention acc(T64)/acc(T8) = 1.5451388888888888  -> runs/toy2/sudoku_full.json

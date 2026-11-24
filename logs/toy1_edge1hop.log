@@ -1,0 +1,43 @@
+[edge1hop] step     1 H=4 K=12 loss=5.9939 ce=3.1937 d=5.6003 |g|=4.841 (0.2s)
+[edge1hop] step   500 H=4 K=11 loss=0.0044 ce=0.0044 d=0.0000 |g|=0.015 (45.4s)
+[edge1hop] step  1000 H=3 K=9 loss=0.0012 ce=0.0012 d=0.0000 |g|=0.008 (88.9s)
+[edge1hop] step  1500 H=3 K=9 loss=0.0006 ce=0.0006 d=0.0000 |g|=0.002 (130.4s)
+[edge1hop] step  2000 H=2 K=7 loss=0.0003 ce=0.0003 d=0.0000 |g|=0.001 (174.8s)
+[edge1hop] step  2500 H=4 K=9 loss=0.0028 ce=0.0002 d=0.0051 |g|=0.599 (217.9s)
+[edge1hop] step  3000 H=2 K=8 loss=0.0002 ce=0.0002 d=0.0000 |g|=0.001 (259.8s)
+  H= 2 K= 6 T=1  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.0000
+  H= 2 K= 6 T=2  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.0000
+  H= 2 K= 6 T=3  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.0000
+  H= 2 K= 6 T=4  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.0000
+  H= 2 K= 6 T=5  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.0000
+  H= 4 K= 8 T=1  acc_both=  5.50% (b0=  6.00, b1=  5.00) dist_mae=9998.0000
+  H= 4 K= 8 T=2  acc_both=  3.50% (b0=  3.50, b1=  3.50) dist_mae=9998.0000
+  H= 4 K= 8 T=3  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.0000
+  H= 4 K= 8 T=4  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.0000
+  H= 4 K= 8 T=5  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.0000
+  H= 4 K=12 T=1  acc_both=  3.75% (b0=  3.50, b1=  4.00) dist_mae=9998.0000
+  H= 4 K=12 T=2  acc_both=  5.75% (b0=  7.50, b1=  4.00) dist_mae=9998.0000
+  H= 4 K=12 T=3  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.0000
+  H= 4 K=12 T=4  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.0000
+  H= 4 K=12 T=5  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.0000
+  H= 8 K=20 T=1  acc_both=  5.00% (b0=  4.00, b1=  6.00) dist_mae=9996.0000
+  H= 8 K=20 T=2  acc_both=  2.75% (b0=  1.00, b1=  4.50) dist_mae=9996.0000
+  H= 8 K=20 T=3  acc_both=  3.25% (b0=  2.00, b1=  4.50) dist_mae=9996.0000
+  H= 8 K=20 T=4  acc_both=  3.75% (b0=  3.00, b1=  4.50) dist_mae=9996.0000
+  H= 8 K=20 T=5  acc_both=  6.00% (b0=  5.50, b1=  6.50) dist_mae=9996.0000
+  H=16 K=20 T=1  acc_both=  4.25% (b0=  4.00, b1=  4.50) dist_mae=9992.0000
+  H=16 K=20 T=2  acc_both=  2.50% (b0=  3.50, b1=  1.50) dist_mae=9992.0000
+  H=16 K=20 T=3  acc_both=  3.50% (b0=  4.50, b1=  2.50) dist_mae=9992.0000
+  H=16 K=20 T=4  acc_both=  3.25% (b0=  4.00, b1=  2.50) dist_mae=9992.0000
+  H=16 K=20 T=5  acc_both=  4.00% (b0=  5.50, b1=  2.50) dist_mae=9992.0000
+  H=16 K=48 T=1  acc_both=  3.25% (b0=  3.00, b1=  3.50) dist_mae=9992.0000
+  H=16 K=48 T=2  acc_both=  2.00% (b0=  2.50, b1=  1.50) dist_mae=9992.0000
+  H=16 K=48 T=3  acc_both=  5.25% (b0=  4.50, b1=  6.00) dist_mae=9992.0000
+  H=16 K=48 T=4  acc_both=  4.00% (b0=  4.50, b1=  3.50) dist_mae=9992.0000
+  H=16 K=48 T=5  acc_both=  3.75% (b0=  3.50, b1=  4.00) dist_mae=9992.0000
+  H=32 K=48 T=1  acc_both=  2.75% (b0=  1.50, b1=  4.00) dist_mae=9984.0000
+  H=32 K=48 T=2  acc_both=  2.75% (b0=  4.50, b1=  1.00) dist_mae=9984.0000
+  H=32 K=48 T=3  acc_both=  4.25% (b0=  4.50, b1=  4.00) dist_mae=9984.0000
+  H=32 K=48 T=4  acc_both=  3.75% (b0=  4.00, b1=  3.50) dist_mae=9984.0000
+  H=32 K=48 T=5  acc_both=  5.00% (b0=  4.50, b1=  5.50) dist_mae=9984.0000
+wrote runs/toy1/edge1hop.json

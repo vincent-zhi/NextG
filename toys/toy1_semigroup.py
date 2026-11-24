@@ -393,13 +393,18 @@ def train(args):
         model.tau = args.tau
     opt = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=0.01)
     d_weight = 0.0 if (args.no_d_supervision or args.model == "vector") else args.d_weight
+    # Controls that advance one hop per step must be given the same hop budget
+    # as the doubling models (T=2 => 4 hops).  Otherwise the comparison is not
+    # hop-matched.
+    onehop = args.model in ("edge1hop", "vector")
+    train_T_eff = 4 if onehop else args.train_T
     t0 = time.time()
     model.train()
     for step in range(1, args.steps + 1):
         H = rng.randint(1, 4)
         K = rng.randint(max(6, H + 1), 12)
         batch = make_batch(args.batch, K, H, rng, R, table, ident, device)
-        loss, ce, extra = batch_loss(model, batch, args.train_T, d_weight, args.model)
+        loss, ce, extra = batch_loss(model, batch, train_T_eff, d_weight, args.model)
         opt.zero_grad(set_to_none=True)
         loss.backward()
         gnorm = torch.nn.utils.clip_grad_norm_(model.parameters(), args.clip)
@@ -410,10 +415,14 @@ def train(args):
                   f"|g|={gnorm.item():.3f} ({time.time()-t0:.1f}s)", flush=True)
 
     results = {"model": args.model, "no_d_supervision": bool(args.no_d_supervision),
-               "steps": args.steps, "train_T": args.train_T, "eval": {}}
+               "steps": args.steps, "train_T_eff": train_T_eff, "eval": {}}
+    # Same test-time step budget for every model: the doubling model covers
+    # 2^T hops in T steps, the one-hop controls cover T.  The controls are
+    # trained with T=4 (enough to fit the H<=4 training set), then evaluated at
+    # the same T grid; their failure at H=32, T=5 is the doubling advantage.
     for H, K in ((2, 6), (4, 8), (4, 12), (8, 20), (16, 20), (16, 48), (32, 48)):
         for T in (1, 2, 3, 4, 5):
-            if (1 << T) < H:
+            if not onehop and (1 << T) < H:
                 continue
             r = evaluate(model, args.model, K, H, T, args.eval_n, rng, R, table,
                          ident, device)
@@ -505,7 +514,7 @@ def main():
                     choices=["st", "edge1hop", "softmin", "mlp", "vector"])
     ap.add_argument("--steps", type=int, default=3000)
     ap.add_argument("--batch", type=int, default=32)
-    ap.add_argument("--lr", type=float, default=1e-3)
+    ap.add_argument("--lr", type=float, default=3e-3)
     ap.add_argument("--clip", type=float, default=1.0)
     ap.add_argument("--train-T", type=int, default=2)
     ap.add_argument("--d-weight", type=float, default=0.5)

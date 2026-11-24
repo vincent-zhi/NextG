@@ -1,0 +1,18 @@
+operator test: D and V exact through 2 squarings (4 hops)
+edge1hop test: 4-hop pair unreachable after 2 one-hop steps (expected)
+forward ok: st logits=(4, 2, 24)
+forward ok: edge1hop logits=(4, 2, 24)
+forward ok: softmin logits=(4, 2, 24)
+forward ok: mlp logits=(4, 2, 24)
+forward ok: vector logits=(4, 2, 24)
+smoke: all checks passed
+sudoku: unique puzzle with 20 blanks
+sat: n=8 m=34 unique non-UP instance
+zero-lock: satisfied assignment => dz = 0 exactly
+nonzero step on an unsatisfied assignment
+forward ok: sudoku loss=6.996 ce=6.674 acc=52.7% auroc=0.9974983930587769
+forward ok: sat loss=0.694 ce=0.672 acc=57.8% auroc=0.9657060503959656
+smoke: all checks passed
+skip toy1/st
+== toy1 edge1hop
+== toy1 softmin

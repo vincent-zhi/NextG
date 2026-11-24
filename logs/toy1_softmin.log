@@ -1,0 +1,3 @@
+[softmin] step     1 H=4 K=12 loss=5.9729 ce=3.1937 d=5.5583 |g|=4.745 (0.1s)
+[softmin] step   500 H=4 K=11 loss=0.0337 ce=0.0069 d=0.0536 |g|=2.282 (30.2s)
+[softmin] step  1000 H=3 K=9 loss=0.0028 ce=0.0015 d=0.0027 |g|=0.319 (60.2s)

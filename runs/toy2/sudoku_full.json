@@ -1,0 +1,36 @@
+{
+  "dataset": "sudoku",
+  "mode": "full",
+  "steps": 1500,
+  "T_train": 8,
+  "eta": 0.3,
+  "n_train": 320,
+  "n_test": 28,
+  "eval": {
+    "T8": {
+      "acc_cells": 0.4752475247524752,
+      "acc_full": 0.0,
+      "auroc_hard_score": 1.0,
+      "viol_rate": 0.869047611951828
+    },
+    "T16": {
+      "acc_cells": 0.5627062706270627,
+      "acc_full": 0.0,
+      "auroc_hard_score": 0.9972529411315918,
+      "viol_rate": 0.815476194024086
+    },
+    "T32": {
+      "acc_cells": 0.6765676567656765,
+      "acc_full": 0.0,
+      "auroc_hard_score": 0.9960557222366333,
+      "viol_rate": 0.7222222089767456
+    },
+    "T64": {
+      "acc_cells": 0.7343234323432343,
+      "acc_full": 0.0714285746216774,
+      "auroc_hard_score": 0.9957765340805054,
+      "viol_rate": 0.6150793731212616
+    }
+  },
+  "retention_8_to_64": 1.5451388888888888
+}
