@@ -1,0 +1,17 @@
+
+=== Extrapolation Curve (B2, max_new=24) ===
+  N= 2 | graph_ood=0.325 | ast_ood=0.100
+  N= 4 | graph_ood=0.325 | ast_ood=0.100
+  N= 8 | graph_ood=0.300 | ast_ood=0.100
+  N=16 | graph_ood=0.300 | ast_ood=0.075
+  N=32 | graph_ood=0.300 | ast_ood=0.075
+  graph_ood overthinking_drop(acc32-max_acc)=-0.025
+  ast_ood overthinking_drop(acc32-max_acc)=-0.025
+
+=== V-Scaling Curve (B2, S=24, N=4) ===
+  V= 4 | acc=0.000
+  V= 8 | acc=0.031
+  V=12 | acc=0.000
+  V=16 | acc=0.000
+  V=24 | acc=0.031
+  V=32 | acc=0.000

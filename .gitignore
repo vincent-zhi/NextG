@@ -1,0 +1,22 @@
+# Model checkpoints and optimizer states (too large for git; 186-318 MB each)
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Run-time noise
+*.pid
+*.tmp
+.DS_Store
+
+# Local data shards (FineWeb-Edu mini shard, 583 MB; lives in /mnt/systemdisk)
+*.jsonl.gz
+fw_mini/
+data/*.jsonl

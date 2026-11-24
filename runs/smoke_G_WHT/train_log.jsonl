@@ -1,0 +1,5 @@
+{"type": "start", "step": 0, "tokens": 0, "total_steps": 3, "params": 17195008, "lr": 0.003, "batch_tokens": 65536, "micro_batch": 8, "grad_accum": 8, "seq_len": 1024, "device": "cuda", "amp_dtype": "torch.float16", "grad_scale": 65536.0, "compile": false, "families": ["graph", "ast"], "model": "G_WHT"}
+{"type": "train", "step": 3, "tokens": 196608, "loss": 3.817533016204834, "lr": 0.0016500000000000002, "loop_N": null, "grad_scale": 65536.0, "tok_per_s": 10983, "peak_vram_gb": 5.94, "data_wait_s": 0.018, "elapsed_s": 17.9, "model": "G_WHT"}
+{"type": "eval", "step": 3, "tokens": 196608, "eval_loss": 4.0562, "fw_nll": 4.0562, "fw_bpb": 4.5517, "syn_nll": 0.0, "fw_tokens": 16384, "syn_tokens": 0, "syn_exact_acc": {"ast": 0.0, "ast_ood": 0.0, "graph": 0.0, "graph_ood": 0.0, "all": 0.0}, "model": "G_WHT"}
+{"type": "ckpt", "step": 3, "tokens": 196608, "path": "runs/smoke_G_WHT/step-0000003.pt", "model": "G_WHT"}
+{"type": "done", "step": 3, "tokens": 196608, "elapsed_s": 222.8, "model": "G_WHT"}

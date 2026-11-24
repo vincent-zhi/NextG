@@ -1,0 +1,26 @@
+Direction F/E/G mandatory CI
+  [PASS] EFG configs: B2_THIN(1/4/0,N=4) B2_NARROW(256,N=14) F_VCYCLE(512/256,N_c=10)
+  [PASS] F_VCYCLE adds ONLY coarse norms (+256 params); scale_c=0.02182 scale_f=0.20851
+  [PASS] graph+ast-only stream, resume-exact, padding unsupervised, OOD Dyck max=666
+=== B2_THIN ===
+  [PASS] B2_THIN: exact causal gradient and bitwise-identical past logits
+  [PASS] B2_THIN: all 35 parameters receive non-zero finite gradients
+  [PASS] B2_THIN: extrapolation RMS N=1:0.0328, N=2:0.0329, N=4:0.0330, N=8:0.0337, N=16:0.0365, N=32:0.0468
+  [PASS] B2_THIN: CUDA FP16 forward/backward finite, grad_scale=65536.0
+=== B2_NARROW ===
+  [PASS] B2_NARROW: exact causal gradient and bitwise-identical past logits
+  [PASS] B2_NARROW: all 35 parameters receive non-zero finite gradients
+  [PASS] B2_NARROW: extrapolation RMS N=1:0.0328, N=2:0.0329, N=4:0.0330, N=8:0.0337, N=16:0.0365, N=32:0.0468
+  [PASS] B2_NARROW: CUDA FP16 forward/backward finite, grad_scale=65536.0
+=== F_VCYCLE ===
+  [PASS] F_VCYCLE: exact causal gradient and bitwise-identical past logits
+  [PASS] F_VCYCLE: all 39 parameters receive non-zero finite gradients
+  [PASS] F_VCYCLE: extrapolation RMS N=2:0.0341, N=5:0.0342, N=10:0.0345, N=20:0.0353, N=40:0.0379
+  [PASS] F_VCYCLE: CUDA FP16 forward/backward finite, grad_scale=65536.0
+  [PASS] F_VCYCLE zero-init equals B2 (out_proj/down_proj=0), max|diff|=0.000e+00
+  [PASS] G_WHT orthogonality H16=0.0e+00 H32=6.0e-08; non-emb params G_WHT=17.063M DENSE_NARROW=17.052M
+  [PASS] G_WHT: exact causal gradient and bitwise-identical past logits
+  [PASS] G_WHT: 2-phase gradient flow across 222 tensors
+  [PASS] G_WHT: CUDA FP16 finite, grad_scale=65536.0
+
+ALL EFG CI PASSED

@@ -1,0 +1,19 @@
+{
+  "model": "B2_THIN",
+  "ckpt": "runs/stage1_b2_thin",
+  "n_train": 4,
+  "base_gate": {
+    "acc_n_half": 0.25625,
+    "acc_n": 0.25625,
+    "woken_up": false,
+    "note": "N=4 accuracy equals N=2 (41/160 both); 62/160 OOD predictions do change with N, but no accuracy gain, so the pre-registered acc(N_train) > acc(N_train/2) precondition fails."
+  },
+  "gate2a_supplement": {
+    "0.02": {"pass1": 0.175, "oracle_pass4": 0.175, "headroom": 0.0},
+    "0.05": {"pass1": 0.175, "oracle_pass4": 0.175, "headroom": 0.0},
+    "0.1": {"pass1": 0.175, "oracle_pass4": 0.175, "headroom": 0.0},
+    "0.2": {"pass1": 0.175, "oracle_pass4": 0.18125, "headroom": 0.00625}
+  },
+  "E": "RED (BASE_SLEEPING + NO_DIVERSITY_HEADROOM)",
+  "note": "Per the pre-registered protocol Stage 2 is not run when the base checkpoint is not woken up; the supplementary Gate 2A diagnostic also fails its 5% headroom gate (max 0.63%)."
+}

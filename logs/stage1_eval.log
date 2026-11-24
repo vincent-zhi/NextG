@@ -1,0 +1,27 @@
+probes: 160 OOD + 80 in-dist
+[B2_THIN] N=  1 graph_ood=0.287 ast_ood=0.150 mean=0.219
+[B2_THIN] N=  2 graph_ood=0.312 ast_ood=0.200 mean=0.256
+[B2_THIN] N=  4 graph_ood=0.312 ast_ood=0.200 mean=0.256
+[B2_THIN] N=  8 graph_ood=0.263 ast_ood=0.212 mean=0.237
+[B2_THIN] N= 16 graph_ood=0.225 ast_ood=0.200 mean=0.213
+[B2_THIN] N= 32 graph_ood=0.100 ast_ood=0.200 mean=0.150
+[B2_NARROW] N=  4 graph_ood=0.287 ast_ood=0.125 mean=0.206
+[B2_NARROW] N=  7 graph_ood=0.312 ast_ood=0.163 mean=0.237
+[B2_NARROW] N= 14 graph_ood=0.300 ast_ood=0.188 mean=0.244
+[B2_NARROW] N= 28 graph_ood=0.287 ast_ood=0.188 mean=0.237
+[F_VCYCLE] N=  2 graph_ood=0.275 ast_ood=0.188 mean=0.231
+[F_VCYCLE] N=  5 graph_ood=0.275 ast_ood=0.188 mean=0.231
+[F_VCYCLE] N= 10 graph_ood=0.275 ast_ood=0.200 mean=0.238
+[F_VCYCLE] N= 20 graph_ood=0.275 ast_ood=0.200 mean=0.238
+[F_VCYCLE] N= 40 graph_ood=0.275 ast_ood=0.200 mean=0.238
+{
+  "F_ood_minus_B2_THIN": -0.01874999999999996,
+  "F_ood_minus_B2_NARROW": -0.006249999999999978,
+  "speed_ratio_vs_B2_THIN": 0.6531917098445595,
+  "Nc10_to_Nc20_delta": 0.0,
+  "beats_both_by_3pct": false,
+  "extends_ok": true,
+  "speed_ok": false,
+  "F": "RED"
+}
+wrote runs/stage1_report.json

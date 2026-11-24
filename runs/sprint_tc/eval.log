@@ -1,0 +1,17 @@
+
+=== Extrapolation Curve (TC_TAPE, max_new=24) ===
+  N= 2 | graph_ood=0.275 | ast_ood=0.025
+  N= 4 | graph_ood=0.275 | ast_ood=0.025
+  N= 8 | graph_ood=0.275 | ast_ood=0.025
+  N=16 | graph_ood=0.300 | ast_ood=0.025
+  N=32 | graph_ood=0.300 | ast_ood=0.000
+  graph_ood overthinking_drop(acc32-max_acc)=+0.000
+  ast_ood overthinking_drop(acc32-max_acc)=-0.025
+
+=== V-Scaling Curve (TC_TAPE, S=24, N=4) ===
+  V= 4 | acc=0.031 | knockout=0.031 | delta_KO=+0.000
+  V= 8 | acc=0.000 | knockout=0.000 | delta_KO=+0.000
+  V=12 | acc=0.000 | knockout=0.000 | delta_KO=+0.000
+  V=16 | acc=0.000 | knockout=0.000 | delta_KO=+0.000
+  V=24 | acc=0.031 | knockout=0.031 | delta_KO=+0.000
+  V=32 | acc=0.000 | knockout=0.000 | delta_KO=+0.000

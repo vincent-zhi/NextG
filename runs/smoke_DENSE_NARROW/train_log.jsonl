@@ -1,0 +1,5 @@
+{"type": "start", "step": 0, "tokens": 0, "total_steps": 3, "params": 17118464, "lr": 0.003, "batch_tokens": 65536, "micro_batch": 8, "grad_accum": 8, "seq_len": 1024, "device": "cuda", "amp_dtype": "torch.float16", "grad_scale": 65536.0, "compile": false, "families": ["graph", "ast"], "model": "DENSE_NARROW"}
+{"type": "train", "step": 3, "tokens": 196608, "loss": 3.4696552753448486, "lr": 0.0016500000000000002, "loop_N": null, "grad_scale": 65536.0, "tok_per_s": 32515, "peak_vram_gb": 3.3, "data_wait_s": 0.017, "elapsed_s": 6.0, "model": "DENSE_NARROW"}
+{"type": "eval", "step": 3, "tokens": 196608, "eval_loss": 3.8871, "fw_nll": 3.8871, "fw_bpb": 4.362, "syn_nll": 0.0, "fw_tokens": 16384, "syn_tokens": 0, "syn_exact_acc": {"ast": 0.0, "ast_ood": 0.0, "graph": 0.0, "graph_ood": 0.0, "all": 0.0}, "model": "DENSE_NARROW"}
+{"type": "ckpt", "step": 3, "tokens": 196608, "path": "runs/smoke_DENSE_NARROW/step-0000003.pt", "model": "DENSE_NARROW"}
+{"type": "done", "step": 3, "tokens": 196608, "elapsed_s": 73.5, "model": "DENSE_NARROW"}

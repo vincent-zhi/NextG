@@ -1,0 +1,135 @@
+{
+  "B2_THIN": {
+    "params": 16194688,
+    "nonemb_params": 16062592,
+    "syn_nll": 0.5253120169051927,
+    "tok_per_s": 48250.0,
+    "peak_vram_gb": 5.21,
+    "in_dist_acc": {
+      "graph": 0.225,
+      "ast": 0.4
+    },
+    "in_dist_mean": 0.3125,
+    "curve": {
+      "1": {
+        "graph_ood": 0.2875,
+        "ast_ood": 0.15,
+        "ood_mean": 0.21875
+      },
+      "2": {
+        "graph_ood": 0.3125,
+        "ast_ood": 0.2,
+        "ood_mean": 0.25625
+      },
+      "4": {
+        "graph_ood": 0.3125,
+        "ast_ood": 0.2,
+        "ood_mean": 0.25625
+      },
+      "8": {
+        "graph_ood": 0.2625,
+        "ast_ood": 0.2125,
+        "ood_mean": 0.2375
+      },
+      "16": {
+        "graph_ood": 0.225,
+        "ast_ood": 0.2,
+        "ood_mean": 0.21250000000000002
+      },
+      "32": {
+        "graph_ood": 0.1,
+        "ast_ood": 0.2,
+        "ood_mean": 0.15000000000000002
+      }
+    },
+    "n_train": 4,
+    "ood_at_train": 0.25625
+  },
+  "B2_NARROW": {
+    "params": 4083584,
+    "nonemb_params": 4017536,
+    "syn_nll": 0.5443751561084891,
+    "tok_per_s": 27469.5,
+    "peak_vram_gb": 8.42,
+    "in_dist_acc": {
+      "graph": 0.25,
+      "ast": 0.45
+    },
+    "in_dist_mean": 0.35,
+    "curve": {
+      "4": {
+        "graph_ood": 0.2875,
+        "ast_ood": 0.125,
+        "ood_mean": 0.20625
+      },
+      "7": {
+        "graph_ood": 0.3125,
+        "ast_ood": 0.1625,
+        "ood_mean": 0.2375
+      },
+      "14": {
+        "graph_ood": 0.3,
+        "ast_ood": 0.1875,
+        "ood_mean": 0.24375
+      },
+      "28": {
+        "graph_ood": 0.2875,
+        "ast_ood": 0.1875,
+        "ood_mean": 0.2375
+      }
+    },
+    "n_train": 14,
+    "ood_at_train": 0.24375
+  },
+  "F_VCYCLE": {
+    "params": 16196736,
+    "nonemb_params": 16064640,
+    "syn_nll": 0.5056853157520026,
+    "tok_per_s": 31516.5,
+    "peak_vram_gb": 7.7,
+    "in_dist_acc": {
+      "graph": 0.2,
+      "ast": 0.4
+    },
+    "in_dist_mean": 0.30000000000000004,
+    "curve": {
+      "2": {
+        "graph_ood": 0.275,
+        "ast_ood": 0.1875,
+        "ood_mean": 0.23125
+      },
+      "5": {
+        "graph_ood": 0.275,
+        "ast_ood": 0.1875,
+        "ood_mean": 0.23125
+      },
+      "10": {
+        "graph_ood": 0.275,
+        "ast_ood": 0.2,
+        "ood_mean": 0.23750000000000002
+      },
+      "20": {
+        "graph_ood": 0.275,
+        "ast_ood": 0.2,
+        "ood_mean": 0.23750000000000002
+      },
+      "40": {
+        "graph_ood": 0.275,
+        "ast_ood": 0.2,
+        "ood_mean": 0.23750000000000002
+      }
+    },
+    "n_train": 10,
+    "ood_at_train": 0.23750000000000002
+  },
+  "verdict": {
+    "F_ood_minus_B2_THIN": -0.01874999999999996,
+    "F_ood_minus_B2_NARROW": -0.006249999999999978,
+    "speed_ratio_vs_B2_THIN": 0.6531917098445595,
+    "Nc10_to_Nc20_delta": 0.0,
+    "beats_both_by_3pct": false,
+    "extends_ok": true,
+    "speed_ok": false,
+    "F": "RED"
+  }
+}

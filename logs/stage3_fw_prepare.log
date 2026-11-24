@@ -1,0 +1,32 @@
+2026-11-24 20:49:40,617 - modelscope - INFO - [MS_DOWNLOAD] get_from_cache_ms downloading: url=https://modelscope.cn/api/v1/datasets/HuggingFaceFW/fineweb-edu/repo?Source=SDK&Revision=master&FilePath=README.md&View=False
+Downloading [README.md]: 0.00B [00:00, ?B/s]Downloading [README.md]: 26.4kB [00:00, 684kB/s]
+2026-11-24 20:49:41,342 - modelscope - INFO - storing https://modelscope.cn/api/v1/datasets/HuggingFaceFW/fineweb-edu/repo?Source=SDK&Revision=master&FilePath=README.md&View=False in cache at /root/.cache/modelscope/hub/datasets/a93b270a1e69e26f76f7fa963e65d9b6d18b9d5791db789df02a730035a18b44
+2026-11-24 20:49:41,343 - modelscope - INFO - creating metadata file for /root/.cache/modelscope/hub/datasets/a93b270a1e69e26f76f7fa963e65d9b6d18b9d5791db789df02a730035a18b44
+5000 docs, 24.1 MB, 3s
+10000 docs, 47.9 MB, 4s
+15000 docs, 71.2 MB, 5s
+20000 docs, 96.5 MB, 6s
+25000 docs, 124.4 MB, 7s
+30000 docs, 148.9 MB, 8s
+35000 docs, 171.1 MB, 9s
+40000 docs, 194.6 MB, 10s
+45000 docs, 219.7 MB, 11s
+50000 docs, 245.4 MB, 12s
+55000 docs, 269.5 MB, 13s
+60000 docs, 293.7 MB, 14s
+65000 docs, 317.6 MB, 15s
+70000 docs, 342.9 MB, 16s
+75000 docs, 367.4 MB, 16s
+80000 docs, 391.7 MB, 17s
+85000 docs, 413.7 MB, 18s
+90000 docs, 437.0 MB, 19s
+95000 docs, 461.2 MB, 20s
+100000 docs, 486.1 MB, 21s
+105000 docs, 508.6 MB, 22s
+110000 docs, 532.1 MB, 23s
+115000 docs, 556.8 MB, 24s
+120000 docs, 582.7 MB, 25s
+DONE 120000 docs -> /mnt/systemdisk/fw_mini/shard0.jsonl (582.7 MB, 25s)
+Fatal Python error: PyGILState_Release: auto-releasing thread-state, but no thread-state for this thread
+Python runtime state: finalizing (tstate=0x000055c972ad40d0)
+
