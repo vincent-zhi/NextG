@@ -1,0 +1,99 @@
+{
+  "dataset": "sat",
+  "mode": "open",
+  "steps": 1500,
+  "T_train": 8,
+  "eta": 0.3,
+  "n_train": 200,
+  "n_test": 25,
+  "auroc_scope": "per_constraint_unit",
+  "eval": {
+    "T4": {
+      "acc_cells": 0.4866666666666667,
+      "acc_full": 0.0,
+      "auroc_hard_score": 0.9999701976776123,
+      "auroc_vs_truth": null,
+      "viol_rate": 0.12239998579025269,
+      "auroc_scope": "per_constraint_unit"
+    },
+    "T8": {
+      "acc_cells": 0.4866666666666667,
+      "acc_full": 0.0,
+      "auroc_hard_score": 0.9999701976776123,
+      "auroc_vs_truth": null,
+      "viol_rate": 0.12239998579025269,
+      "auroc_scope": "per_constraint_unit"
+    },
+    "T16": {
+      "acc_cells": 0.4866666666666667,
+      "acc_full": 0.0,
+      "auroc_hard_score": 0.9999701976776123,
+      "auroc_vs_truth": null,
+      "viol_rate": 0.12239998579025269,
+      "auroc_scope": "per_constraint_unit"
+    },
+    "T32": {
+      "acc_cells": 0.4866666666666667,
+      "acc_full": 0.0,
+      "auroc_hard_score": 0.9999701976776123,
+      "auroc_vs_truth": null,
+      "viol_rate": 0.12239998579025269,
+      "auroc_scope": "per_constraint_unit"
+    },
+    "T64": {
+      "acc_cells": 0.4866666666666667,
+      "acc_full": 0.0,
+      "auroc_hard_score": 0.9999701976776123,
+      "auroc_vs_truth": null,
+      "viol_rate": 0.12239998579025269,
+      "auroc_scope": "per_constraint_unit"
+    }
+  },
+  "acc_ratio_8_to_64": 1.0,
+  "retention_true_8_to_64": null,
+  "retention_true_4_to_64": null,
+  "n_full_ok": {
+    "T4": 0,
+    "T8": 0,
+    "T16": 0,
+    "T32": 0,
+    "T64": 0
+  },
+  "eval_curve": {
+    "T4": {
+      "acc_cells": 0.4866666666666667,
+      "acc_full": 0.0,
+      "auroc": 0.9999701976776123,
+      "auroc_vs_truth": null,
+      "viol_rate": 0.12239998579025269
+    },
+    "T8": {
+      "acc_cells": 0.4866666666666667,
+      "acc_full": 0.0,
+      "auroc": 0.9999701976776123,
+      "auroc_vs_truth": null,
+      "viol_rate": 0.12239998579025269
+    },
+    "T16": {
+      "acc_cells": 0.4866666666666667,
+      "acc_full": 0.0,
+      "auroc": 0.9999701976776123,
+      "auroc_vs_truth": null,
+      "viol_rate": 0.12239998579025269
+    },
+    "T32": {
+      "acc_cells": 0.4866666666666667,
+      "acc_full": 0.0,
+      "auroc": 0.9999701976776123,
+      "auroc_vs_truth": null,
+      "viol_rate": 0.12239998579025269
+    },
+    "T64": {
+      "acc_cells": 0.4866666666666667,
+      "acc_full": 0.0,
+      "auroc": 0.9999701976776123,
+      "auroc_vs_truth": null,
+      "viol_rate": 0.12239998579025269
+    }
+  }
+}

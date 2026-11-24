@@ -92,7 +92,7 @@ D_MAX = 1.0e4
 # --------------------------------------------------------------------------
 def make_batch(Bk: int, K: int, H: int, rng: random.Random,
                R: torch.Tensor, table: torch.Tensor, ident: int,
-               device: torch.device):
+               device: torch.device, node_perm: bool = False):
     """A batch of layered DAGs with a unique backbone 0 -> 1 -> ... -> H."""
     assert K >= H + 1
     cost = torch.zeros(Bk, K, K, dtype=torch.long, device=device)
@@ -145,6 +145,21 @@ def make_batch(Bk: int, K: int, H: int, rng: random.Random,
     diag = torch.eye(K, dtype=torch.bool, device=device).unsqueeze(0).expand(Bk, K, K).clone()
     s = torch.zeros(Bk, dtype=torch.long, device=device)
     t = torch.full((Bk,), H, dtype=torch.long, device=device)
+    if node_perm:
+        # Break the "spine nodes have the smallest indices" tie-break: the
+        # tropical argmin otherwise picks backbone nodes for free when D is
+        # uniform.  A model that truly learns routing is invariant to this.
+        for b in range(Bk):
+            px = torch.randperm(K, device=device)
+            cost[b] = cost[b][px][:, px]
+            op[b] = op[b][px][:, px]
+            edge[b] = edge[b][px][:, px]
+            true_cost[b] = true_cost[b][px][:, px]
+            diag[b] = diag[b][px][:, px]
+            inv = torch.empty(K, dtype=torch.long, device=device)
+            inv[px] = torch.arange(K, device=device)
+            s[b] = inv[s[b]]
+            t[b] = inv[t[b]]
     return dict(cost=cost, op=op, edge=edge, diag=diag, true_cost=true_cost,
                 true_dist=true_dist, target=target, s=s, t=t, H=H, K=K)
 
@@ -349,14 +364,16 @@ def batch_loss(model, batch, T, d_weight, model_kind):
 
 
 @torch.no_grad()
-def evaluate(model, model_kind, K, H, T, n, rng, R, table, ident, device):
+def evaluate(model, model_kind, K, H, T, n, rng, R, table, ident, device,
+             node_perm=False):
     Bk = 64
     correct = torch.zeros(2, device=device)
     total = 0
     dist_err = 0.0
     for _ in range(0, n, Bk):
         b = min(Bk, n - total)
-        batch = make_batch(b, K, H, rng, R, table, ident, device)
+        batch = make_batch(b, K, H, rng, R, table, ident, device,
+                           node_perm=node_perm)
         logits, D, _ = model(batch["cost"], batch["op"], batch["edge"], batch["diag"],
                              batch["s"], batch["t"], T)
         pred = logits.argmax(-1)
@@ -398,34 +415,54 @@ def train(args):
     # hop-matched.
     onehop = args.model in ("edge1hop", "vector")
     train_T_eff = 4 if onehop else args.train_T
+    # Cold-start escape for the no-D-supervision ("hard core") run:
+    #   warm_frac steps on H=1 only (no routing: V0 learns a clean S4 op map),
+    #   then H in 2..4, with tau annealed linearly tau_start -> tau_end.
+    warm_steps = int(args.warm_frac * args.steps)
+    anneal_steps = max(1, int(args.tau_anneal_frac * args.steps))
+    tau_start = args.tau if args.tau_start is None else args.tau_start
+    tau_end = args.tau if args.tau_end is None else args.tau_end
     t0 = time.time()
     model.train()
     for step in range(1, args.steps + 1):
-        H = rng.randint(1, 4)
+        if hasattr(model, "tau"):
+            frac = min(1.0, step / anneal_steps)
+            model.tau = tau_start + (tau_end - tau_start) * frac
+        if step <= warm_steps:
+            H = 1
+        elif warm_steps > 0:
+            H = rng.randint(2, 4)
+        else:
+            H = rng.randint(1, 4)
         K = rng.randint(max(6, H + 1), 12)
-        batch = make_batch(args.batch, K, H, rng, R, table, ident, device)
+        batch = make_batch(args.batch, K, H, rng, R, table, ident, device,
+                           node_perm=args.node_perm)
         loss, ce, extra = batch_loss(model, batch, train_T_eff, d_weight, args.model)
         opt.zero_grad(set_to_none=True)
         loss.backward()
         gnorm = torch.nn.utils.clip_grad_norm_(model.parameters(), args.clip)
         opt.step()
         if step % args.log_every == 0 or step == 1:
-            print(f"[{args.model}] step {step:5d} H={H} K={K} loss={loss.item():.4f} "
+            tau_s = getattr(model, "tau", float("nan"))
+            print(f"[{args.model}] step {step:5d} H={H} K={K} tau={tau_s:.3f} "
+                  f"loss={loss.item():.4f} "
                   f"ce={ce.item():.4f} d={extra.item():.4f} "
                   f"|g|={gnorm.item():.3f} ({time.time()-t0:.1f}s)", flush=True)
 
     results = {"model": args.model, "no_d_supervision": bool(args.no_d_supervision),
-               "steps": args.steps, "train_T_eff": train_T_eff, "eval": {}}
+               "steps": args.steps, "train_T_eff": train_T_eff,
+               "warm_frac": args.warm_frac, "tau_start": tau_start,
+               "tau_end": tau_end, "node_perm": bool(args.node_perm), "eval": {}}
     # Same test-time step budget for every model: the doubling model covers
     # 2^T hops in T steps, the one-hop controls cover T.  The controls are
     # trained with T=4 (enough to fit the H<=4 training set), then evaluated at
     # the same T grid; their failure at H=32, T=5 is the doubling advantage.
-    for H, K in ((2, 6), (4, 8), (4, 12), (8, 20), (16, 20), (16, 48), (32, 48)):
+    for H, K in ((1, 6), (2, 6), (4, 8), (4, 12), (8, 20), (16, 20), (16, 48), (32, 48)):
         for T in (1, 2, 3, 4, 5):
             if not onehop and (1 << T) < H:
                 continue
             r = evaluate(model, args.model, K, H, T, args.eval_n, rng, R, table,
-                         ident, device)
+                         ident, device, node_perm=args.node_perm)
             results["eval"][f"H{H}_K{K}_T{T}"] = r
             print(f"  H={H:2d} K={K:2d} T={T}  acc_both={r['acc_both']*100:6.2f}% "
                   f"(b0={r['acc_block0']*100:6.2f}, b1={r['acc_block1']*100:6.2f}) "
@@ -519,6 +556,16 @@ def main():
     ap.add_argument("--train-T", type=int, default=2)
     ap.add_argument("--d-weight", type=float, default=0.5)
     ap.add_argument("--tau", type=float, default=0.1)
+    ap.add_argument("--tau-start", type=float, default=None,
+                    help="linear tau anneal start (default: --tau)")
+    ap.add_argument("--tau-end", type=float, default=None,
+                    help="linear tau anneal end (default: --tau)")
+    ap.add_argument("--tau-anneal-frac", type=float, default=1.0,
+                    help="fraction of steps over which tau is annealed")
+    ap.add_argument("--warm-frac", type=float, default=0.0,
+                    help="fraction of steps trained on H=1 only (cold-start warmup)")
+    ap.add_argument("--node-perm", action="store_true",
+                    help="randomly permute node indices (kills the argmin tie-break shortcut)")
     ap.add_argument("--no-d-supervision", action="store_true")
     ap.add_argument("--eval-n", type=int, default=200)
     ap.add_argument("--seed", type=int, default=0)

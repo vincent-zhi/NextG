@@ -1,0 +1,116 @@
+{
+  "dataset": "sudoku",
+  "mode": "full",
+  "steps": 0,
+  "T_train": 8,
+  "eta": 0.3,
+  "n_train": 320,
+  "n_test": 28,
+  "neural_v": true,
+  "v_auroc_heldout": 1.0,
+  "auroc_scope": "per_constraint_unit",
+  "eval": {
+    "T4": {
+      "acc_cells": 0.27887788778877887,
+      "acc_full": 0.0,
+      "auroc_hard_score": 0.9698380827903748,
+      "auroc_score_hard": 1.0,
+      "auroc_analytic": 0.9949392676353455,
+      "auroc_vs_truth": 0.9749423861503601,
+      "viol_rate": 0.9801587294787169,
+      "auroc_scope": "per_constraint_unit"
+    },
+    "T8": {
+      "acc_cells": 0.3118811881188119,
+      "acc_full": 0.0,
+      "auroc_hard_score": 0.9475635886192322,
+      "auroc_score_hard": 1.0,
+      "auroc_analytic": 0.9959613084793091,
+      "auroc_vs_truth": 0.9288678169250488,
+      "viol_rate": 0.9365079328417778,
+      "auroc_scope": "per_constraint_unit"
+    },
+    "T16": {
+      "acc_cells": 0.3102310231023102,
+      "acc_full": 0.0,
+      "auroc_hard_score": 0.9561631679534912,
+      "auroc_score_hard": 1.0,
+      "auroc_analytic": 0.9969618320465088,
+      "auroc_vs_truth": 0.9599370360374451,
+      "viol_rate": 0.9523809514939785,
+      "auroc_scope": "per_constraint_unit"
+    },
+    "T32": {
+      "acc_cells": 0.31683168316831684,
+      "acc_full": 0.0,
+      "auroc_hard_score": 0.971500813961029,
+      "auroc_score_hard": 1.0,
+      "auroc_analytic": 0.994732141494751,
+      "auroc_vs_truth": 0.9636819958686829,
+      "viol_rate": 0.9186507910490036,
+      "auroc_scope": "per_constraint_unit"
+    },
+    "T64": {
+      "acc_cells": 0.2953795379537954,
+      "acc_full": 0.0,
+      "auroc_hard_score": 0.9380755424499512,
+      "auroc_score_hard": 1.0,
+      "auroc_analytic": 0.9885304570198059,
+      "auroc_vs_truth": 0.9436852931976318,
+      "viol_rate": 0.9226190447807312,
+      "auroc_scope": "per_constraint_unit"
+    }
+  },
+  "acc_ratio_8_to_64": 0.9470899470899472,
+  "retention_true_8_to_64": null,
+  "retention_true_4_to_64": null,
+  "n_full_ok": {
+    "T4": 0,
+    "T8": 0,
+    "T16": 0,
+    "T32": 0,
+    "T64": 0
+  },
+  "eval_curve": {
+    "T4": {
+      "acc_cells": 0.27887788778877887,
+      "acc_full": 0.0,
+      "auroc": 0.9698380827903748,
+      "auroc_analytic": 0.9949392676353455,
+      "auroc_vs_truth": 0.9749423861503601,
+      "viol_rate": 0.9801587294787169
+    },
+    "T8": {
+      "acc_cells": 0.3118811881188119,
+      "acc_full": 0.0,
+      "auroc": 0.9475635886192322,
+      "auroc_analytic": 0.9959613084793091,
+      "auroc_vs_truth": 0.9288678169250488,
+      "viol_rate": 0.9365079328417778
+    },
+    "T16": {
+      "acc_cells": 0.3102310231023102,
+      "acc_full": 0.0,
+      "auroc": 0.9561631679534912,
+      "auroc_analytic": 0.9969618320465088,
+      "auroc_vs_truth": 0.9599370360374451,
+      "viol_rate": 0.9523809514939785
+    },
+    "T32": {
+      "acc_cells": 0.31683168316831684,
+      "acc_full": 0.0,
+      "auroc": 0.971500813961029,
+      "auroc_analytic": 0.994732141494751,
+      "auroc_vs_truth": 0.9636819958686829,
+      "viol_rate": 0.9186507910490036
+    },
+    "T64": {
+      "acc_cells": 0.2953795379537954,
+      "acc_full": 0.0,
+      "auroc": 0.9380755424499512,
+      "auroc_analytic": 0.9885304570198059,
+      "auroc_vs_truth": 0.9436852931976318,
+      "viol_rate": 0.9226190447807312
+    }
+  }
+}

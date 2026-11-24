@@ -1,0 +1,99 @@
+{
+  "dataset": "sudoku",
+  "mode": "primal",
+  "steps": 1500,
+  "T_train": 8,
+  "eta": 0.3,
+  "n_train": 320,
+  "n_test": 28,
+  "auroc_scope": "per_constraint_unit",
+  "eval": {
+    "T4": {
+      "acc_cells": 0.3613861386138614,
+      "acc_full": 0.0,
+      "auroc_hard_score": 0.953666627407074,
+      "auroc_vs_truth": 0.9276998043060303,
+      "viol_rate": 0.815476194024086,
+      "auroc_scope": "per_constraint_unit"
+    },
+    "T8": {
+      "acc_cells": 0.40924092409240925,
+      "acc_full": 0.0,
+      "auroc_hard_score": 0.9113181233406067,
+      "auroc_vs_truth": 0.8837543725967407,
+      "viol_rate": 0.7480158805847168,
+      "auroc_scope": "per_constraint_unit"
+    },
+    "T16": {
+      "acc_cells": 0.4801980198019802,
+      "acc_full": 0.0,
+      "auroc_hard_score": 0.872221052646637,
+      "auroc_vs_truth": 0.8406352996826172,
+      "viol_rate": 0.7003968358039856,
+      "auroc_scope": "per_constraint_unit"
+    },
+    "T32": {
+      "acc_cells": 0.5792079207920792,
+      "acc_full": 0.1428571492433548,
+      "auroc_hard_score": 0.8402725458145142,
+      "auroc_vs_truth": 0.779728353023529,
+      "viol_rate": 0.5575396716594696,
+      "auroc_scope": "per_constraint_unit"
+    },
+    "T64": {
+      "acc_cells": 0.665016501650165,
+      "acc_full": 0.1785714328289032,
+      "auroc_hard_score": 0.831028163433075,
+      "auroc_vs_truth": 0.7704041600227356,
+      "viol_rate": 0.454365074634552,
+      "auroc_scope": "per_constraint_unit"
+    }
+  },
+  "acc_ratio_8_to_64": 1.625,
+  "retention_true_8_to_64": null,
+  "retention_true_4_to_64": null,
+  "n_full_ok": {
+    "T4": 0,
+    "T8": 0,
+    "T16": 0,
+    "T32": 4,
+    "T64": 5
+  },
+  "eval_curve": {
+    "T4": {
+      "acc_cells": 0.3613861386138614,
+      "acc_full": 0.0,
+      "auroc": 0.953666627407074,
+      "auroc_vs_truth": 0.9276998043060303,
+      "viol_rate": 0.815476194024086
+    },
+    "T8": {
+      "acc_cells": 0.40924092409240925,
+      "acc_full": 0.0,
+      "auroc": 0.9113181233406067,
+      "auroc_vs_truth": 0.8837543725967407,
+      "viol_rate": 0.7480158805847168
+    },
+    "T16": {
+      "acc_cells": 0.4801980198019802,
+      "acc_full": 0.0,
+      "auroc": 0.872221052646637,
+      "auroc_vs_truth": 0.8406352996826172,
+      "viol_rate": 0.7003968358039856
+    },
+    "T32": {
+      "acc_cells": 0.5792079207920792,
+      "acc_full": 0.1428571492433548,
+      "auroc": 0.8402725458145142,
+      "auroc_vs_truth": 0.779728353023529,
+      "viol_rate": 0.5575396716594696
+    },
+    "T64": {
+      "acc_cells": 0.665016501650165,
+      "acc_full": 0.1785714328289032,
+      "auroc": 0.831028163433075,
+      "auroc_vs_truth": 0.7704041600227356,
+      "viol_rate": 0.454365074634552
+    }
+  }
+}

@@ -16,3 +16,6 @@ smoke: all checks passed
 skip toy1/st
 == toy1 edge1hop
 == toy1 softmin
+== toy1 mlp
+== toy1 vector
+== toy1 st (hard core, no D supervision)

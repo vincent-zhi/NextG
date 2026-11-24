@@ -1,0 +1,34 @@
+[st] step     1 H=4 K=12 tau=0.100 loss=3.1937 ce=3.1937 d=0.0000 |g|=0.782 (0.1s)
+[st] step   500 H=4 K=11 tau=0.100 loss=4.8704 ce=4.8704 d=0.0000 |g|=13.352 (28.7s)
+[st] step  1000 H=3 K=9 tau=0.100 loss=3.1030 ce=3.1030 d=0.0000 |g|=4.985 (57.4s)
+[st] step  1500 H=3 K=9 tau=0.100 loss=0.8078 ce=0.8078 d=0.0000 |g|=2.195 (85.5s)
+[st] step  2000 H=2 K=7 tau=0.100 loss=0.0738 ce=0.0738 d=0.0000 |g|=0.401 (115.2s)
+[st] step  2500 H=4 K=9 tau=0.100 loss=0.2823 ce=0.2823 d=0.0000 |g|=1.409 (143.6s)
+[st] step  3000 H=2 K=8 tau=0.100 loss=0.0238 ce=0.0238 d=0.0000 |g|=0.202 (172.1s)
+  H= 1 K= 6 T=1  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.4455
+  H= 1 K= 6 T=2  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.4455
+  H= 1 K= 6 T=3  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.4455
+  H= 1 K= 6 T=4  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.4455
+  H= 1 K= 6 T=5  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.4455
+  H= 2 K= 6 T=1  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.8910
+  H= 2 K= 6 T=2  acc_both= 99.50% (b0=100.00, b1= 99.00) dist_mae=0.8910
+  H= 2 K= 6 T=3  acc_both= 99.75% (b0= 99.50, b1=100.00) dist_mae=0.8910
+  H= 2 K= 6 T=4  acc_both= 99.50% (b0= 99.50, b1= 99.50) dist_mae=0.8910
+  H= 2 K= 6 T=5  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.8910
+  H= 4 K= 8 T=2  acc_both= 95.00% (b0= 94.50, b1= 95.50) dist_mae=1.7819
+  H= 4 K= 8 T=3  acc_both= 94.00% (b0= 93.50, b1= 94.50) dist_mae=1.7819
+  H= 4 K= 8 T=4  acc_both= 94.00% (b0= 91.50, b1= 96.50) dist_mae=1.7819
+  H= 4 K= 8 T=5  acc_both= 95.00% (b0= 95.50, b1= 94.50) dist_mae=1.7819
+  H= 4 K=12 T=2  acc_both= 93.75% (b0= 92.50, b1= 95.00) dist_mae=1.7819
+  H= 4 K=12 T=3  acc_both= 95.25% (b0= 95.00, b1= 95.50) dist_mae=1.7819
+  H= 4 K=12 T=4  acc_both= 94.50% (b0= 94.00, b1= 95.00) dist_mae=1.7819
+  H= 4 K=12 T=5  acc_both= 94.75% (b0= 96.00, b1= 93.50) dist_mae=1.7819
+  H= 8 K=20 T=3  acc_both= 77.75% (b0= 82.00, b1= 73.50) dist_mae=3.5639
+  H= 8 K=20 T=4  acc_both= 81.00% (b0= 78.50, b1= 83.50) dist_mae=3.5639
+  H= 8 K=20 T=5  acc_both= 80.25% (b0= 81.50, b1= 79.00) dist_mae=3.5639
+  H=16 K=20 T=4  acc_both= 52.75% (b0= 51.00, b1= 54.50) dist_mae=7.1277
+  H=16 K=20 T=5  acc_both= 51.75% (b0= 52.50, b1= 51.00) dist_mae=7.1277
+  H=16 K=48 T=4  acc_both= 49.75% (b0= 47.50, b1= 52.00) dist_mae=7.1277
+  H=16 K=48 T=5  acc_both= 51.75% (b0= 51.50, b1= 52.00) dist_mae=7.1277
+  H=32 K=48 T=5  acc_both= 20.50% (b0= 18.50, b1= 22.50) dist_mae=14.2555
+wrote runs/toy1/st_hardcore.json

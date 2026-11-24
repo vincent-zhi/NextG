@@ -1,0 +1,59 @@
+{
+  "dataset": "sudoku",
+  "mode": "full",
+  "untrained": true,
+  "n_test": 25,
+  "eval": {
+    "T4": {
+      "acc_cells": 0.37105751391465674,
+      "acc_full": 0.0,
+      "auroc_hard_score": 0.9993841052055359,
+      "auroc_score_hard": 1.0,
+      "auroc_analytic": 0.9993841052055359,
+      "auroc_vs_truth": 0.9915740489959717,
+      "viol_rate": 0.9311111122369766,
+      "auroc_scope": "per_constraint_unit"
+    },
+    "T8": {
+      "acc_cells": 0.46382189239332094,
+      "acc_full": 0.0,
+      "auroc_hard_score": 0.9989533424377441,
+      "auroc_score_hard": 1.0,
+      "auroc_analytic": 0.9989533424377441,
+      "auroc_vs_truth": 0.9890031814575195,
+      "viol_rate": 0.9288888871669769,
+      "auroc_scope": "per_constraint_unit"
+    },
+    "T16": {
+      "acc_cells": 0.6103896103896104,
+      "acc_full": 0.0,
+      "auroc_hard_score": 0.9974591732025146,
+      "auroc_score_hard": 1.0,
+      "auroc_analytic": 0.9974591732025146,
+      "auroc_vs_truth": 0.9830706715583801,
+      "viol_rate": 0.7844444513320923,
+      "auroc_scope": "per_constraint_unit"
+    },
+    "T32": {
+      "acc_cells": 0.6641929499072357,
+      "acc_full": 0.0,
+      "auroc_hard_score": 0.9985170960426331,
+      "auroc_score_hard": 1.0,
+      "auroc_analytic": 0.9985170960426331,
+      "auroc_vs_truth": 0.992804229259491,
+      "viol_rate": 0.7711111158132553,
+      "auroc_scope": "per_constraint_unit"
+    },
+    "T64": {
+      "acc_cells": 0.7476808905380334,
+      "acc_full": 0.1599999964237213,
+      "auroc_hard_score": 0.9968739748001099,
+      "auroc_score_hard": 1.0,
+      "auroc_analytic": 0.9968739748001099,
+      "auroc_vs_truth": 0.98471599817276,
+      "viol_rate": 0.5911111235618591,
+      "auroc_scope": "per_constraint_unit"
+    }
+  },
+  "acc_ratio_8_to_64": 1.612
+}

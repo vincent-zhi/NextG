@@ -1,0 +1,13 @@
+data: train=320 test=28 cells=36 vals=6 M=18 (8.0s)
+[v-train] step    1 loss=0.5142 E_pos=0.135 E_neg=0.134
+[v-train] step  200 loss=0.0061 E_pos=0.049 E_neg=1.352
+[v-train] step  400 loss=0.0045 E_pos=0.037 E_neg=1.248
+[v-train] step  600 loss=0.0032 E_pos=0.029 E_neg=1.378
+[v-train] step  800 loss=0.0031 E_pos=0.031 E_neg=1.282
+[v-train] held-out board AUROC = 1.0
+  T= 4 acc_cells= 27.89% acc_full= 0.00% auroc=0.9698380827903748 viol=98.02%
+  T= 8 acc_cells= 31.19% acc_full= 0.00% auroc=0.9475635886192322 viol=93.65%
+  T=16 acc_cells= 31.02% acc_full= 0.00% auroc=0.9561631679534912 viol=95.24%
+  T=32 acc_cells= 31.68% acc_full= 0.00% auroc=0.971500813961029 viol=91.87%
+  T=64 acc_cells= 29.54% acc_full= 0.00% auroc=0.9380755424499512 viol=92.26%
+acc ratio T64/T8 = 0.9470899470899472; true retention P(ok64|ok8) = None; P(ok64|ok4) = None  -> runs/toy2/sudoku_neuralv_vsuper.json

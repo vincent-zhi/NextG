@@ -1,0 +1,7 @@
+untrained sudoku mode=full T= 4: acc_cells= 34.87% acc_full= 0.00% viol= 93.92% auroc_score=0.9997550249099731 auroc_score_hard=1.0 auroc_analytic=0.9997550249099731 auroc_vs_truth=0.9875114560127258
+untrained sudoku mode=full T= 8: acc_cells= 47.15% acc_full= 0.00% viol= 88.89% auroc_score=0.9990788102149963 auroc_score_hard=1.0 auroc_analytic=0.9990788102149963 auroc_vs_truth=0.9795976877212524
+untrained sudoku mode=full T=16: acc_cells= 54.61% acc_full= 0.00% viol= 85.98% auroc_score=1.0 auroc_score_hard=1.0 auroc_analytic=1.0 auroc_vs_truth=0.9894107580184937
+untrained sudoku mode=full T=32: acc_cells= 65.57% acc_full= 0.00% viol= 73.81% auroc_score=0.9978277683258057 auroc_score_hard=1.0 auroc_analytic=0.9978277683258057 auroc_vs_truth=0.9800891876220703
+untrained sudoku mode=full T=64: acc_cells= 76.75% acc_full= 9.52% viol= 56.61% auroc_score=0.9962103962898254 auroc_score_hard=1.0 auroc_analytic=0.9962103962898254 auroc_vs_truth=0.9780413508415222
+wrote runs/toy2/sudoku_untrained_s1.json (acc ratio T64/T8 = 1.627906976744186)
+  shuffled-label AUROC=0.5511621236801147

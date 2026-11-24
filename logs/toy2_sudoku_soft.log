@@ -1,0 +1,6 @@
+data: train=320 test=28 cells=36 vals=6 M=18 (15.4s)
+[sudoku/soft] step     1 loss=0.4015 ce=0.4000 l1=0.005 l3=0.0000 |g|=0.02 (17.7s)
+[sudoku/soft] step   100 loss=0.2596 ce=0.2473 l1=0.035 l3=0.7956 |g|=0.08 (51.5s)
+[sudoku/soft] step   200 loss=0.1609 ce=0.1561 l1=0.013 l3=0.2580 |g|=0.08 (83.7s)
+[sudoku/soft] step   300 loss=0.1076 ce=0.1055 l1=0.002 l3=0.1086 |g|=0.05 (121.0s)
+[sudoku/soft] step   400 loss=0.0850 ce=0.0839 l1=0.000 l3=0.0288 |g|=0.04 (154.4s)

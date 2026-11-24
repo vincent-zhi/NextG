@@ -1,0 +1,6 @@
+data: train=320 test=28 cells=36 vals=6 M=18 (15.2s)
+[sudoku/no_zero_lock] step     1 loss=0.9557 ce=0.7991 l1=0.419 l3=11.4594 |g|=0.04 (17.7s)
+[sudoku/no_zero_lock] step   100 loss=0.6801 ce=0.5934 l1=0.265 l3=5.9750 |g|=0.18 (51.9s)
+[sudoku/no_zero_lock] step   200 loss=0.5119 ce=0.4641 l1=0.147 l3=3.2625 |g|=0.16 (87.3s)
+[sudoku/no_zero_lock] step   300 loss=0.4219 ce=0.3887 l1=0.086 l3=2.4000 |g|=0.21 (125.7s)
+[sudoku/no_zero_lock] step   400 loss=0.3412 ce=0.3255 l1=0.034 l3=1.1500 |g|=0.15 (161.7s)

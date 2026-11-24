@@ -6,31 +6,94 @@
   "eta": 0.3,
   "n_train": 320,
   "n_test": 28,
+  "auroc_scope": "per_constraint_unit",
   "eval": {
+    "T4": {
+      "acc_cells": 0.38613861386138615,
+      "acc_full": 0.0,
+      "auroc_hard_score": 0.9988313317298889,
+      "auroc_vs_truth": 0.9827091097831726,
+      "viol_rate": 0.8988095223903656,
+      "auroc_scope": "per_constraint_unit"
+    },
     "T8": {
       "acc_cells": 0.4752475247524752,
       "acc_full": 0.0,
       "auroc_hard_score": 1.0,
-      "viol_rate": 0.869047611951828
+      "auroc_vs_truth": 0.9852557182312012,
+      "viol_rate": 0.869047611951828,
+      "auroc_scope": "per_constraint_unit"
     },
     "T16": {
       "acc_cells": 0.5627062706270627,
       "acc_full": 0.0,
       "auroc_hard_score": 0.9972529411315918,
-      "viol_rate": 0.815476194024086
+      "auroc_vs_truth": 0.9794787168502808,
+      "viol_rate": 0.815476194024086,
+      "auroc_scope": "per_constraint_unit"
     },
     "T32": {
       "acc_cells": 0.6765676567656765,
       "acc_full": 0.0,
       "auroc_hard_score": 0.9960557222366333,
-      "viol_rate": 0.7222222089767456
+      "auroc_vs_truth": 0.9746910929679871,
+      "viol_rate": 0.7222222089767456,
+      "auroc_scope": "per_constraint_unit"
     },
     "T64": {
       "acc_cells": 0.7343234323432343,
       "acc_full": 0.0714285746216774,
       "auroc_hard_score": 0.9957765340805054,
-      "viol_rate": 0.6150793731212616
+      "auroc_vs_truth": 0.9725220799446106,
+      "viol_rate": 0.6150793731212616,
+      "auroc_scope": "per_constraint_unit"
     }
   },
-  "retention_8_to_64": 1.5451388888888888
+  "acc_ratio_8_to_64": 1.5451388888888888,
+  "retention_true_8_to_64": null,
+  "retention_true_4_to_64": null,
+  "n_full_ok": {
+    "T4": 0,
+    "T8": 0,
+    "T16": 0,
+    "T32": 0,
+    "T64": 2
+  },
+  "eval_curve": {
+    "T4": {
+      "acc_cells": 0.38613861386138615,
+      "acc_full": 0.0,
+      "auroc": 0.9988313317298889,
+      "auroc_vs_truth": 0.9827091097831726,
+      "viol_rate": 0.8988095223903656
+    },
+    "T8": {
+      "acc_cells": 0.4752475247524752,
+      "acc_full": 0.0,
+      "auroc": 1.0,
+      "auroc_vs_truth": 0.9852557182312012,
+      "viol_rate": 0.869047611951828
+    },
+    "T16": {
+      "acc_cells": 0.5627062706270627,
+      "acc_full": 0.0,
+      "auroc": 0.9972529411315918,
+      "auroc_vs_truth": 0.9794787168502808,
+      "viol_rate": 0.815476194024086
+    },
+    "T32": {
+      "acc_cells": 0.6765676567656765,
+      "acc_full": 0.0,
+      "auroc": 0.9960557222366333,
+      "auroc_vs_truth": 0.9746910929679871,
+      "viol_rate": 0.7222222089767456
+    },
+    "T64": {
+      "acc_cells": 0.7343234323432343,
+      "acc_full": 0.0714285746216774,
+      "auroc": 0.9957765340805054,
+      "auroc_vs_truth": 0.9725220799446106,
+      "viol_rate": 0.6150793731212616
+    }
+  }
 }

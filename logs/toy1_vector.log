@@ -1,0 +1,48 @@
+[vector] step     1 H=4 K=12 tau=nan loss=3.1856 ce=3.1856 d=0.0000 |g|=0.264 (0.1s)
+[vector] step   500 H=4 K=11 tau=nan loss=3.1789 ce=3.1789 d=0.0000 |g|=0.137 (24.3s)
+[vector] step  1000 H=3 K=9 tau=nan loss=3.1768 ce=3.1768 d=0.0000 |g|=0.113 (48.3s)
+[vector] step  1500 H=3 K=9 tau=nan loss=3.1708 ce=3.1708 d=0.0000 |g|=0.116 (71.7s)
+[vector] step  2000 H=2 K=7 tau=nan loss=3.1757 ce=3.1757 d=0.0000 |g|=0.128 (96.3s)
+[vector] step  2500 H=4 K=9 tau=nan loss=3.1806 ce=3.1806 d=0.0000 |g|=0.103 (125.1s)
+[vector] step  3000 H=2 K=8 tau=nan loss=3.1776 ce=3.1776 d=0.0000 |g|=0.118 (203.3s)
+  H= 1 K= 6 T=1  acc_both= 42.25% (b0= 44.00, b1= 40.50) dist_mae=0.0000
+  H= 1 K= 6 T=2  acc_both= 50.75% (b0= 56.00, b1= 45.50) dist_mae=0.0000
+  H= 1 K= 6 T=3  acc_both= 48.25% (b0= 48.00, b1= 48.50) dist_mae=0.0000
+  H= 1 K= 6 T=4  acc_both= 47.50% (b0= 45.50, b1= 49.50) dist_mae=0.0000
+  H= 1 K= 6 T=5  acc_both= 52.50% (b0= 54.00, b1= 51.00) dist_mae=0.0000
+  H= 2 K= 6 T=1  acc_both=  4.75% (b0=  3.50, b1=  6.00) dist_mae=0.0000
+  H= 2 K= 6 T=2  acc_both=  4.50% (b0=  4.00, b1=  5.00) dist_mae=0.0000
+  H= 2 K= 6 T=3  acc_both=  5.75% (b0=  7.50, b1=  4.00) dist_mae=0.0000
+  H= 2 K= 6 T=4  acc_both=  4.50% (b0=  5.50, b1=  3.50) dist_mae=0.0000
+  H= 2 K= 6 T=5  acc_both=  5.25% (b0=  6.50, b1=  4.00) dist_mae=0.0000
+  H= 4 K= 8 T=1  acc_both=  3.50% (b0=  3.50, b1=  3.50) dist_mae=0.0000
+  H= 4 K= 8 T=2  acc_both=  4.00% (b0=  3.50, b1=  4.50) dist_mae=0.0000
+  H= 4 K= 8 T=3  acc_both=  4.00% (b0=  3.50, b1=  4.50) dist_mae=0.0000
+  H= 4 K= 8 T=4  acc_both=  5.50% (b0=  5.00, b1=  6.00) dist_mae=0.0000
+  H= 4 K= 8 T=5  acc_both=  4.25% (b0=  4.00, b1=  4.50) dist_mae=0.0000
+  H= 4 K=12 T=1  acc_both=  3.75% (b0=  5.50, b1=  2.00) dist_mae=0.0000
+  H= 4 K=12 T=2  acc_both=  4.25% (b0=  5.00, b1=  3.50) dist_mae=0.0000
+  H= 4 K=12 T=3  acc_both=  4.75% (b0=  4.00, b1=  5.50) dist_mae=0.0000
+  H= 4 K=12 T=4  acc_both=  4.75% (b0=  5.50, b1=  4.00) dist_mae=0.0000
+  H= 4 K=12 T=5  acc_both=  4.75% (b0=  5.00, b1=  4.50) dist_mae=0.0000
+  H= 8 K=20 T=1  acc_both=  3.00% (b0=  2.00, b1=  4.00) dist_mae=0.0000
+  H= 8 K=20 T=2  acc_both=  3.00% (b0=  3.50, b1=  2.50) dist_mae=0.0000
+  H= 8 K=20 T=3  acc_both=  3.25% (b0=  3.00, b1=  3.50) dist_mae=0.0000
+  H= 8 K=20 T=4  acc_both=  3.50% (b0=  3.00, b1=  4.00) dist_mae=0.0000
+  H= 8 K=20 T=5  acc_both=  4.50% (b0=  3.50, b1=  5.50) dist_mae=0.0000
+  H=16 K=20 T=1  acc_both=  3.50% (b0=  3.00, b1=  4.00) dist_mae=0.0000
+  H=16 K=20 T=2  acc_both=  4.25% (b0=  3.50, b1=  5.00) dist_mae=0.0000
+  H=16 K=20 T=3  acc_both=  5.00% (b0=  4.00, b1=  6.00) dist_mae=0.0000
+  H=16 K=20 T=4  acc_both=  5.75% (b0=  5.50, b1=  6.00) dist_mae=0.0000
+  H=16 K=20 T=5  acc_both=  3.75% (b0=  3.50, b1=  4.00) dist_mae=0.0000
+  H=16 K=48 T=1  acc_both=  4.25% (b0=  3.50, b1=  5.00) dist_mae=0.0000
+  H=16 K=48 T=2  acc_both=  3.25% (b0=  2.00, b1=  4.50) dist_mae=0.0000
+  H=16 K=48 T=3  acc_both=  4.75% (b0=  4.50, b1=  5.00) dist_mae=0.0000
+  H=16 K=48 T=4  acc_both=  3.25% (b0=  3.00, b1=  3.50) dist_mae=0.0000
+  H=16 K=48 T=5  acc_both=  3.75% (b0=  3.50, b1=  4.00) dist_mae=0.0000
+  H=32 K=48 T=1  acc_both=  5.75% (b0=  6.50, b1=  5.00) dist_mae=0.0000
+  H=32 K=48 T=2  acc_both=  3.25% (b0=  3.50, b1=  3.00) dist_mae=0.0000
+  H=32 K=48 T=3  acc_both=  4.50% (b0=  4.50, b1=  4.50) dist_mae=0.0000
+  H=32 K=48 T=4  acc_both=  6.00% (b0=  4.50, b1=  7.50) dist_mae=0.0000
+  H=32 K=48 T=5  acc_both=  4.75% (b0=  5.00, b1=  4.50) dist_mae=0.0000
+wrote runs/toy1/vector.json

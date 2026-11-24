@@ -337,6 +337,44 @@ class SATTask:
         return (1.0 - sat).prod(-1, keepdim=True)  # (B,M,1)
 
 
+class NeuralV(nn.Module):
+    """Per-constraint-unit neural residual, replacing the analytic violation.
+
+    Sudoku only (36 cells, 18 row/col/box units, 6 values).  Input per unit is
+    the current assignment e on the unit's 6 cells + the clue one-hots + the
+    clue mask + a unit-type one-hot; output is a 6-vector residual.  With this
+    module the "violation" is learned rather than hand-written, so an untrained
+    instance must have AUROC ~0.5 against the analytic validity label.
+    """
+
+    def __init__(self, n_vals=6, n_cells_per_unit=6, hidden=128):
+        super().__init__()
+        self.n_vals = n_vals
+        self.cells_per_unit = n_cells_per_unit
+        in_dim = n_cells_per_unit * (2 * n_vals + 1) + 3
+        self.net = nn.Sequential(
+            nn.Linear(in_dim, hidden), nn.SiLU(),
+            nn.Linear(hidden, hidden), nn.SiLU(),
+            nn.Linear(hidden, n_vals),
+        )
+
+    def forward(self, task, e):
+        if not isinstance(task, SudokuTask):
+            raise NotImplementedError("NeuralV is Sudoku-only")
+        B = e.shape[0]
+        dev = e.device
+        clues = task.x
+        mask = task.clue_mask.float().unsqueeze(-1)
+        outs = []
+        for t, idx in enumerate(CONSTRAINTS):
+            feats = torch.cat([e[:, idx], clues[:, idx], mask[:, idx]], -1)
+            feats = feats.reshape(B, -1)
+            ty = torch.zeros(B, 3, device=dev)
+            ty[:, 0 if t < 6 else (1 if t < 12 else 2)] = 1.0
+            outs.append(self.net(torch.cat([feats, ty], -1)))
+        return torch.stack(outs, 1)  # (B,18,6)
+
+
 # ==========================================================================
 # solver
 # ==========================================================================
@@ -350,7 +388,12 @@ def ste_hard(p):
     return hard + (p - p.detach())
 
 
-def solve(z, task, T, eta, beta, gamma, lam_max, mode, eps):
+def _viol(task, e, vnet=None):
+    """Analytic violation by default, or a learned per-unit residual."""
+    return task.violation(e) if vnet is None else vnet(task, e)
+
+
+def solve(z, task, T, eta, beta, gamma, lam_max, mode, eps, vnet=None):
     B, n, _ = z.shape
     lam = torch.zeros(B, task.M, device=z.device)
     Es = []
@@ -358,14 +401,14 @@ def solve(z, task, T, eta, beta, gamma, lam_max, mode, eps):
         p = torch.softmax(z, dim=-1)
         e = p if mode == "soft" else ste_hard(p)
         e = task.clamp_e(e)
-        v = task.violation(e)
+        v = _viol(task, e, vnet)
         nv = v.norm(dim=-1)
         rho = charbonnier(nv, eps)
         if mode != "primal":  # primal-only keeps lambda identically zero
             lam = torch.clamp(beta * lam + gamma * rho, 0.0, lam_max)
         with torch.enable_grad():
             ed = e.detach().requires_grad_(True)
-            vd = task.violation(ed)
+            vd = _viol(task, ed, vnet)
             nvd = vd.norm(dim=-1)
             if mode == "no_zero_lock":
                 obj = ((1.0 + lam.detach()) * nvd).sum()
@@ -382,16 +425,17 @@ def solve(z, task, T, eta, beta, gamma, lam_max, mode, eps):
 # model + loss
 # ==========================================================================
 class Model(nn.Module):
-    def __init__(self, task):
+    def __init__(self, task, neural_v=False):
         super().__init__()
         self.enc = Encoder(task.n_cells_max, task.n_vals)
+        self.v = NeuralV() if neural_v else None
 
     def forward(self, task, T, args):
         z0 = self.enc(task.x)
         if args.mode == "open" or T <= 0:
             return z0, [], z0
         z, Es = solve(z0, task, T, args.eta, args.beta, args.gamma,
-                      args.lam_max, args.mode, args.eps)
+                      args.lam_max, args.mode, args.eps, vnet=self.v)
         return z, Es, z0
 
 
@@ -415,9 +459,9 @@ def loss_fn(model, task, T, args):
     sup = task.sup_mask
     ce = F.cross_entropy(z[sup], task.sol[sup] - (1 if isinstance(task, SudokuTask) else 0))
     e = task.clamp_e(ste_hard(p))
-    v = task.violation(e)
+    v = _viol(task, e, model.v)
     l1 = 0.5 * (v * v).sum(-1).mean()
-    vb = task.violation(corruption(task, e))
+    vb = _viol(task, corruption(task, e), model.v)
     l2 = torch.relu(args.delta - vb.norm(dim=-1).max(-1).values).mean() if vb.numel() else z.new_zeros(())
     if len(Es) > 1:
         E = torch.stack(Es, dim=-1)
@@ -434,18 +478,50 @@ def evaluate(model, task, T, args):
     pred = z.argmax(-1) + (1 if isinstance(task, SudokuTask) else 0)
     sup = task.sup_mask
     acc_cells = ((pred == task.sol) & sup).sum().item() / sup.sum().item()
-    acc_full = (pred == task.sol).all(-1).float().mean().item()
+    ok_board = (pred == task.sol).all(-1)
+    acc_full = ok_board.float().mean().item()
     e = task.clamp_e(ste_hard(p))
-    v_hard = task.violation(e)
+    v_hard = task.violation(e)          # analytic ground truth, never learned
     nv_hard = v_hard.norm(dim=-1)
+    # AUROC is per constraint unit (Sudoku: 18 row/col/box units, each scored by
+    # its 6-value residual; SAT: one score per clause), on puzzles whose solution
+    # grid is held out of training.  The LABEL is always the analytic validity of
+    # the hard prediction; the SCORE is the model's own residual (learned V when
+    # neural_v is on, analytic otherwise), so an untrained V scores ~0.5.
     label = (nv_hard < 1e-6).flatten().cpu()
     score = (-charbonnier(nv_hard, args.eps)).flatten().cpu()
     e_soft = task.clamp_e(p)
-    nv_soft = task.violation(e_soft).norm(dim=-1)
+    nv_soft_an = task.violation(e_soft).norm(dim=-1)
+    nv_soft = nv_soft_an if model.v is None else model.v(task, e_soft).norm(dim=-1)
     score_soft = (-nv_soft).flatten().cpu()
+    # hard-state score: the cleanest "can V rank violated units" probe
+    if model.v is not None:
+        nv_hard_score = model.v(task, e).norm(dim=-1)
+        auroc_score_hard = auroc((-nv_hard_score).flatten().cpu(), label)
+    else:
+        auroc_score_hard = auroc(score, label)
+    # Ground-truth localisation (Sudoku only): do high-residual units actually
+    # contain cells the model got wrong?  This is NOT the self-consistency
+    # AUROC above, which holds even for a random encoder because both score and
+    # label are derived from the same analytic residual.
+    if isinstance(task, SudokuTask):
+        wrong = pred != task.sol
+        unit_bad = torch.stack([wrong[:, idx].any(-1) for idx in CONSTRAINTS], 1)
+        has_blank = torch.stack([sup[:, idx].any(-1) for idx in CONSTRAINTS], 1)
+        # AUROC ranks the score of correct units above that of wrong units, so
+        # the positive class is the correct unit (~unit_bad).
+        au_truth = auroc(score_soft.reshape(unit_bad.shape)[has_blank],
+                         (~unit_bad)[has_blank])
+    else:
+        au_truth = None
     return dict(acc_cells=acc_cells, acc_full=acc_full,
                 auroc_hard_score=auroc(score_soft, label),
-                viol_rate=1.0 - label.float().mean().item())
+                auroc_score_hard=auroc_score_hard,
+                auroc_analytic=auroc((-nv_soft_an).flatten().cpu(), label),
+                auroc_vs_truth=au_truth,
+                viol_rate=1.0 - label.float().mean().item(),
+                auroc_scope="per_constraint_unit",
+                board_ok=ok_board.cpu().tolist())
 
 
 def auroc(scores, labels):
@@ -509,6 +585,50 @@ def make_tasks(args, rng, device):
     return SATTask(train, device), SATTask(test, device)
 
 
+def corrupt_solutions(task, k, gen):
+    """One-hot solution (positive) and a k-cell-flipped copy (negative)."""
+    B, n, v = task.sol.shape[0], task.sol.shape[1], task.n_vals
+    pos = F.one_hot(task.sol - 1, v).float()
+    neg = pos.clone()
+    for b in range(B):
+        sup = task.sup_mask[b].nonzero().flatten()
+        pick = sup[torch.randperm(len(sup), generator=gen)[:k]]
+        cur = task.sol[b, pick] - 1
+        new = (cur + torch.randint(1, v, (k,), generator=gen)) % v
+        neg[b, pick] = 0.0
+        neg[b, pick, new] = 1.0
+    return pos, neg
+
+
+def v_energy(vnet, task, e):
+    return vnet(task, e).norm(dim=-1).max(-1).values  # per board
+
+
+def train_verifier(model, tr, te, args, device):
+    """Hard-negative energy training of V_theta; no encoder update."""
+    gen = torch.Generator().manual_seed(args.seed + 7)
+    opt = torch.optim.AdamW(model.v.parameters(), lr=args.v_lr, weight_decay=0.01)
+    for step in range(1, args.v_train_steps + 1):
+        pos, neg = corrupt_solutions(tr, args.v_flip, gen)
+        ep = v_energy(model.v, tr, pos)
+        en = v_energy(model.v, tr, neg)
+        loss = F.relu(args.v_margin + ep - en).mean() + 0.1 * ep.mean()
+        opt.zero_grad(set_to_none=True)
+        loss.backward()
+        opt.step()
+        if step % 200 == 0 or step == 1:
+            print(f"[v-train] step {step:4d} loss={loss.item():.4f} "
+                  f"E_pos={ep.mean().item():.3f} E_neg={en.mean().item():.3f}",
+                  flush=True)
+    with torch.no_grad():
+        pos, neg = corrupt_solutions(te, args.v_flip, gen)
+        scores = torch.cat([-v_energy(model.v, te, pos), -v_energy(model.v, te, neg)])
+        labels = torch.cat([torch.ones(pos.shape[0]), torch.zeros(neg.shape[0])])
+        au = auroc(scores, labels)
+    print(f"[v-train] held-out board AUROC = {au}", flush=True)
+    return au
+
+
 def train(args):
     device = torch.device(args.device)
     rng = random.Random(args.seed)
@@ -517,7 +637,10 @@ def train(args):
     tr, te = make_tasks(args, rng, device)
     print(f"data: train={tr.x.shape[0]} test={te.x.shape[0]} "
           f"cells={tr.n_cells} vals={tr.n_vals} M={tr.M} ({time.time()-t0:.1f}s)", flush=True)
-    model = Model(tr).to(device)
+    model = Model(tr, neural_v=args.neural_v).to(device)
+    v_auroc = None
+    if args.neural_v and args.v_train_steps > 0:
+        v_auroc = train_verifier(model, tr, te, args, device)
     opt = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=0.01)
     for step in range(1, args.steps + 1):
         loss, ce, l1, l3 = loss_fn(model, tr, args.T_train, args)
@@ -531,20 +654,42 @@ def train(args):
                   f"({time.time()-t0:.1f}s)", flush=True)
     res = {"dataset": args.dataset, "mode": args.mode, "steps": args.steps,
            "T_train": args.T_train, "eta": args.eta,
-           "n_train": int(tr.x.shape[0]), "n_test": int(te.x.shape[0]), "eval": {}}
-    for T in (8, 16, 32, 64):
+           "n_train": int(tr.x.shape[0]), "n_test": int(te.x.shape[0]),
+           "neural_v": bool(args.neural_v), "v_auroc_heldout": v_auroc,
+           "auroc_scope": "per_constraint_unit", "eval": {}}
+    ok_by_T = {}
+    for T in (4, 8, 16, 32, 64):
         r = evaluate(model, te, T, args)
+        ok_by_T[T] = torch.tensor(r.pop("board_ok"), dtype=torch.bool)
         res["eval"][f"T{T}"] = r
         print(f"  T={T:2d} acc_cells={r['acc_cells']*100:6.2f}% "
               f"acc_full={r['acc_full']*100:5.2f}% auroc={r['auroc_hard_score']} "
               f"viol={r['viol_rate']*100:.2f}%", flush=True)
+
+    def _ret(before, after):
+        """True retention P(ok@after | ok@before), not an accuracy ratio."""
+        n = int(before.sum())
+        return (int((before & after).sum()) / n) if n else None
+
     a8 = res["eval"]["T8"]["acc_cells"]
     a64 = res["eval"]["T64"]["acc_cells"]
-    res["retention_8_to_64"] = (a64 / a8) if a8 > 0 else None
+    res["acc_ratio_8_to_64"] = (a64 / a8) if a8 > 0 else None
+    res["retention_true_8_to_64"] = _ret(ok_by_T[8], ok_by_T[64])
+    res["retention_true_4_to_64"] = _ret(ok_by_T[4], ok_by_T[64])
+    res["n_full_ok"] = {f"T{T}": int(ok.sum()) for T, ok in ok_by_T.items()}
+    res["eval_curve"] = {f"T{T}": {"acc_cells": res["eval"][f"T{T}"]["acc_cells"],
+                                   "acc_full": res["eval"][f"T{T}"]["acc_full"],
+                                   "auroc": res["eval"][f"T{T}"]["auroc_hard_score"],
+                                   "auroc_analytic": res["eval"][f"T{T}"]["auroc_analytic"],
+                                   "auroc_vs_truth": res["eval"][f"T{T}"]["auroc_vs_truth"],
+                                   "viol_rate": res["eval"][f"T{T}"]["viol_rate"]}
+                         for T in (4, 8, 16, 32, 64)}
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
     with open(args.out, "w") as f:
         json.dump(res, f, indent=2)
-    print(f"retention acc(T64)/acc(T8) = {res['retention_8_to_64']}  -> {args.out}")
+    print(f"acc ratio T64/T8 = {res['acc_ratio_8_to_64']}; "
+          f"true retention P(ok64|ok8) = {res['retention_true_8_to_64']}; "
+          f"P(ok64|ok4) = {res['retention_true_4_to_64']}  -> {args.out}")
 
 
 # ==========================================================================
@@ -628,6 +773,12 @@ def main():
     ap.add_argument("--sat-n-train", type=int, default=8)
     ap.add_argument("--sat-n-ood", type=int, default=12)
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--neural-v", action="store_true",
+                    help="replace the analytic violation with a learned V_theta")
+    ap.add_argument("--v-train-steps", type=int, default=0)
+    ap.add_argument("--v-lr", type=float, default=1e-3)
+    ap.add_argument("--v-margin", type=float, default=0.5)
+    ap.add_argument("--v-flip", type=int, default=2)
     ap.add_argument("--device", default="cpu")
     ap.add_argument("--out", default="toys/runs_toy2/sudoku_full.json")
     ap.add_argument("--log-every", type=int, default=100)

@@ -1,3 +1,29 @@
 [softmin] step     1 H=4 K=12 loss=5.9729 ce=3.1937 d=5.5583 |g|=4.745 (0.1s)
 [softmin] step   500 H=4 K=11 loss=0.0337 ce=0.0069 d=0.0536 |g|=2.282 (30.2s)
 [softmin] step  1000 H=3 K=9 loss=0.0028 ce=0.0015 d=0.0027 |g|=0.319 (60.2s)
+[softmin] step  1500 H=3 K=9 loss=0.0132 ce=0.0007 d=0.0250 |g|=1.144 (90.3s)
+[softmin] step  2000 H=2 K=7 loss=0.0129 ce=0.0004 d=0.0250 |g|=0.663 (121.5s)
+[softmin] step  2500 H=4 K=9 loss=0.0042 ce=0.0003 d=0.0078 |g|=0.742 (151.0s)
+[softmin] step  3000 H=2 K=8 loss=0.0099 ce=0.0002 d=0.0194 |g|=0.565 (181.1s)
+  H= 2 K= 6 T=1  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.0204
+  H= 2 K= 6 T=2  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.1588
+  H= 2 K= 6 T=3  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.3128
+  H= 2 K= 6 T=4  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.4584
+  H= 2 K= 6 T=5  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.6003
+  H= 4 K= 8 T=2  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.0408
+  H= 4 K= 8 T=3  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.3841
+  H= 4 K= 8 T=4  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.7099
+  H= 4 K= 8 T=5  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=1.0082
+  H= 4 K=12 T=2  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.0408
+  H= 4 K=12 T=3  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.3841
+  H= 4 K=12 T=4  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.7099
+  H= 4 K=12 T=5  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=1.0082
+  H= 8 K=20 T=3  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.0816
+  H= 8 K=20 T=4  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.8647
+  H= 8 K=20 T=5  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=1.5353
+  H=16 K=20 T=4  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.1632
+  H=16 K=20 T=5  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=1.8583
+  H=16 K=48 T=4  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.1632
+  H=16 K=48 T=5  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=1.8583
+  H=32 K=48 T=5  acc_both=100.00% (b0=100.00, b1=100.00) dist_mae=0.3263
+wrote runs/toy1/softmin.json

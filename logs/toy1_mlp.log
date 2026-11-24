@@ -1,0 +1,29 @@
+[mlp] step     1 H=4 K=12 loss=5.9747 ce=3.1746 d=5.6003 |g|=4.726 (0.4s)
+[mlp] step   500 H=4 K=11 loss=3.1804 ce=3.1804 d=0.0000 |g|=0.138 (66.6s)
+[mlp] step  1000 H=3 K=9 loss=3.1762 ce=3.1761 d=0.0001 |g|=0.134 (131.9s)
+[mlp] step  1500 H=3 K=9 loss=3.1975 ce=3.1975 d=0.0000 |g|=2.167 (195.4s)
+[mlp] step  2000 H=2 K=7 loss=3.1741 ce=3.1741 d=0.0000 |g|=0.270 (260.4s)
+[mlp] step  2500 H=4 K=9 loss=3.1810 ce=3.1810 d=0.0000 |g|=0.103 (322.6s)
+[mlp] step  3000 H=2 K=8 loss=3.1775 ce=3.1775 d=0.0000 |g|=0.118 (387.1s)
+  H= 2 K= 6 T=1  acc_both=  2.75% (b0=  3.50, b1=  2.00) dist_mae=0.0000
+  H= 2 K= 6 T=2  acc_both=  4.00% (b0=  3.00, b1=  5.00) dist_mae=0.0000
+  H= 2 K= 6 T=3  acc_both=  4.25% (b0=  4.50, b1=  4.00) dist_mae=0.0000
+  H= 2 K= 6 T=4  acc_both=  4.00% (b0=  3.50, b1=  4.50) dist_mae=0.0000
+  H= 2 K= 6 T=5  acc_both=  3.50% (b0=  4.50, b1=  2.50) dist_mae=0.0000
+  H= 4 K= 8 T=2  acc_both=  4.50% (b0=  3.00, b1=  6.00) dist_mae=0.0000
+  H= 4 K= 8 T=3  acc_both=  3.75% (b0=  2.50, b1=  5.00) dist_mae=0.0000
+  H= 4 K= 8 T=4  acc_both=  3.25% (b0=  2.50, b1=  4.00) dist_mae=0.0000
+  H= 4 K= 8 T=5  acc_both=  3.50% (b0=  4.00, b1=  3.00) dist_mae=0.0000
+  H= 4 K=12 T=2  acc_both=  5.00% (b0=  4.00, b1=  6.00) dist_mae=0.0000
+  H= 4 K=12 T=3  acc_both=  3.75% (b0=  4.00, b1=  3.50) dist_mae=0.0000
+  H= 4 K=12 T=4  acc_both=  5.50% (b0=  6.00, b1=  5.00) dist_mae=0.0000
+  H= 4 K=12 T=5  acc_both=  2.75% (b0=  4.00, b1=  1.50) dist_mae=0.0000
+  H= 8 K=20 T=3  acc_both=  4.50% (b0=  5.50, b1=  3.50) dist_mae=0.0000
+  H= 8 K=20 T=4  acc_both=  5.25% (b0=  6.50, b1=  4.00) dist_mae=0.0000
+  H= 8 K=20 T=5  acc_both=  2.25% (b0=  0.50, b1=  4.00) dist_mae=0.0000
+  H=16 K=20 T=4  acc_both=  5.00% (b0=  5.00, b1=  5.00) dist_mae=0.0000
+  H=16 K=20 T=5  acc_both=  3.75% (b0=  4.50, b1=  3.00) dist_mae=0.0000
+  H=16 K=48 T=4  acc_both=  3.75% (b0=  2.50, b1=  5.00) dist_mae=0.0000
+  H=16 K=48 T=5  acc_both=  3.75% (b0=  3.50, b1=  4.00) dist_mae=0.0000
+  H=32 K=48 T=5  acc_both=  3.50% (b0=  4.50, b1=  2.50) dist_mae=0.0001
+wrote runs/toy1/mlp.json

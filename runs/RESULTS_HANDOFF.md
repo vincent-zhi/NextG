@@ -1,13 +1,15 @@
 # F/E/G staged falsification — results handoff (2026-11-24 23:10 GMT+8)
 
 Status at write time: **Stage 1 complete, Stage 2 complete (early-stopped by its
-pre-registered gates), Stage 3 in progress** (`DENSE_NARROW` ~28% trained,
-`G_WHT` queued). Everything below is measured unless explicitly marked
+pre-registered gates), Stage 3 complete: G hard-killed at step 1440/2289 on the
+project lead's directive (see 3.6); toy-1/toy-2 micro-foundation results added
+(see section 7)**. Everything below is measured unless explicitly marked
 "pending".
 
-Repo: `/root/work/loop-verify-sprint` (no git repo; files are the source of
-truth). GPU: one V100-SXM2-16GB (SM70), torch 2.5.1+cu124, fp16 + GradScaler,
-`--no-compile` on SM70. Disk: 86 GB free, `runs/` currently 9.8 GB.
+Repo: `/root/work/loop-verify-sprint` (git; pushed to
+`git@github.com:vincent-zhi/NextG.git`). GPU: one V100-SXM2-16GB (SM70), torch
+2.5.1+cu124, fp16 + GradScaler, `--no-compile` on SM70. Disk: 86 GB free,
+`runs/` currently 9.8 GB.
 
 ---
 
@@ -17,7 +19,7 @@ truth). GPU: one V100-SXM2-16GB (SM70), torch 2.5.1+cu124, fp16 + GradScaler,
 |---|---|---|---|
 | 1 | F — channel-space Matryoshka V-cycle | OOD beats BOTH controls by >=3pt, Nc 10→20 holds, tok/s >=0.90x B2_THIN | **RED** |
 | 2 | E — latent verifier best-of-K | base woken (acc(N) > acc(N/2)), then Gate 2A Oracle Pass@4 headroom >=5pt, then E2 >=3pt over N=16 and logit-conf, AUROC >=0.70 | **RED (BASE_SLEEPING + NO_DIVERSITY_HEADROOM)** |
-| 3 | G — holographic coefficients, real FineWeb-Edu | static w+opt VRAM >=3.5x lower than B0_FULL, fw_bpb >=0.02 better than DENSE_NARROW, speed floor | **pending** (only static VRAM measured: 3.74x, passes) |
+| 3 | G — holographic coefficients, real FineWeb-Edu | static w+opt VRAM >=3.5x lower than B0_FULL, fw_bpb >=0.02 better than DENSE_NARROW, speed floor | **RED / HARD KILL (2026-11-25 00:40)**: static 3.74x passes, but live peak VRAM 5.94 GB = 1.8x DENSE_NARROW's 3.3 GB, throughput 24.4k = 0.31x DENSE, and the fw_bpb gap narrows (-0.023 @1000, -0.019 @1250). B0_FULL deliberately not run. |
 
 ---
 
@@ -177,14 +179,34 @@ pre-registered operator and its FLOP claim).
   (33.4 min), 78,648 tok/s (median last 20), peak 3.3 GB, final train loss
   1.1760. fw_bpb on the fixed 2% holdout: 2.4614 @250, 2.1928 @500,
   **1.761 @2289**. This is the bar G_WHT must beat by >=0.02 (i.e. <=1.741).
-- `G_WHT`: started 23:36, 2,289 steps / 150M tokens, 17.195M total params.
-  **Live throughput 25,713 tok/s = 0.327x DENSE_NARROW**, peak 5.94 GB
-  (step 50 at 128.3 s; ETA ~01:12). This fails the DENSE-relative speed floor
-  (needs >=0.70x); only the B0-relative branch (>=0.85x B0_FULL) remains, and
-  B0_FULL is only launched if G's fw_bpb beats DENSE's 1.761.
-- `B0_FULL`: runs only if G's final fw_bpb < DENSE_NARROW's (protocol); static
-  VRAM is already measured regardless.
-- Result file: `runs/stage3_report.json` (written by `eval_stage3_g.py`).
+- `G_WHT`: started 23:36, **terminated at step 1440/2289 (63%) on 00:40**, 
+  17.195M total params. Live throughput 24,428 tok/s = **0.31x DENSE_NARROW**,
+  peak **5.94 GB = 1.80x DENSE_NARROW's 3.3 GB**. Last validation points:
+  fw_bpb 1.9577 @1000 and 1.8985 @1250 vs DENSE 1.9806 / 1.9172 at the same
+  steps (gaps -0.023, -0.019: the advantage is shrinking, not growing).
+- `B0_FULL`: **not run** (directive below); static VRAM 3.74x already measured.
+- Result file `runs/stage3_report.json` is intentionally **not** written: a
+  report comparing G@1250 to DENSE@2289 would be misleading.
+
+### 3.6 Direction G verdict — HARD KILL (project lead, 2026-11-25 00:40)
+
+`G_WHT` is a 20-layer **non-recurrent** feedforward stack (d=512); the
+"looped compute sits idle" diagnosis from F/E does **not** apply to it.  Its
+measured profile is:
+
+| property | DENSE_NARROW | G_WHT | result |
+|---|---|---|---|
+| static weight+opt VRAM | 195.9 MB | 196.8 MB | G's claimed win is vs B0_FULL (3.74x) |
+| peak training VRAM | 3.3 GB | **5.94 GB (1.80x)** | the "memory-saving" design costs more live memory |
+| throughput | 78,648 tok/s | 24,428 tok/s (**0.31x**) | far below the 0.70x speed floor |
+| fw_bpb vs DENSE | 1.761 @2289 | 1.8985 @1250 (-0.019 at matched step) | gain < 0.02 and shrinking |
+
+Even if the final fw_bpb had crossed the 0.02 bar, a design that is 1.8x
+peak-VRAM, 3.1x wall-clock, and ~0.02 bpb better has no adoption path on this
+hardware.  The 55-minute B0_FULL rerun was skipped; the finding is recorded as
+a documented negative.  The scientific sub-claim that remains (coefficient-space
+training is quality-neutral at ~3.77x static compression) is true at the
+measured point but did not convert into a usable model.
 
 ---
 
@@ -261,3 +283,123 @@ Logs: `logs/stage1_master.log`, `logs/stage1_eval.log`,
 - Stage-3 `micro_batch=8` per the handoff; larger batches were not substituted.
 - Static VRAM is reported as weights + AdamW moments; peak VRAM is from the
   trainer.
+- Toy-2 `no_zero_lock`, `soft` and the SAT `full`/`primal` runs were stopped
+  mid-matrix on the project lead's directive (2026-11-25); they are not in the
+  report and `run_toys.sh` no longer schedules them.
+- Toy-1 hardcore was re-run at lr=3e-3 after the original lr=1e-3 number was
+  traced to the optimiser schedule, not to the absence of D supervision.
+- Toy-2 Protocols A/B (learned neural verifier) were added after the
+  untrained-encoder control showed that the original AUROC measured the
+  analytic residual.
+
+---
+
+## 7. Toy 1 / Toy 2 — micro-foundations (2026-11-25, post G-kill)
+
+All numbers from `runs/toy1/*.json` and `runs/toy2/*.json`; the table is
+regenerated by `python make_toy_report.py` -> `runs/TOY_REPORT.md`. CPU-only,
+2 threads per run. Toy 2 runs `no_zero_lock`, `soft` and the SAT `full`/`primal`
+jobs were killed on the project lead's stop directive and are **not** reported.
+
+### 7.1 Toy 1 — ST-tropical doubling with an SO(3)^2 payload
+
+| model | H4/T2 | H8/T3 | H16/T4 | H32/T5 | dist MAE H32 |
+|---|---|---|---|---|---|
+| st (D-supervised) | 100% | 100% | 100% | 100% | 0.0005 |
+| st_hardcore (payload loss only) | 95% | 77.8% | 52.8% | 20.5% | 14.2555 |
+| st_hardcore_perm | 99.3% | 93.0% | 85.5% | 57.0% | 13.7240 |
+| edge1hop | 100% | 3.3% | 3.3% | 5.0% | 9984 |
+| softmin | 100% | 100% | 100% | 100% | 0.3263 |
+| mlp payload | 4.5% | 4.5% | 5.0% | 3.5% | 0.0001 |
+| vector loop | 5.5% | 3.3% | 5.8% | 4.8% | 0.0000 |
+
+Chance for the two-block payload is 4.17%.
+
+- **The doubling engine is real.** With D supervision the model is exact at every
+  depth (`min-plus` closure is idempotent, which is why accuracy is flat in T
+  within a graph size); the one-hop and MLP-payload controls collapse to chance
+  by H8, and the Vector-Loop control is 42% at H1 but 3-6% from H4 on. What solves
+  the task is composing the semiring operator across iterations, not a per-token
+  shortcut.
+- **Hardcore (no D supervision) is an optimisation lottery, not a fixed
+  ceiling.** lr=3e-3, three seeds, acc_both:
+
+  | seed | H2 | H4 | H8 | H16 | H32 | dist MAE H32 |
+  |---|---|---|---|---|---|---|
+  | 0 | 99.5% | 94-95% | 77.8-81% | 50-53% | 20.5% | 14.2555 |
+  | 1 | 100% | 100% | 100% | 100% | 100% | 14.5050 |
+  | 2 | 88.5% | 50% | 25% | 10% | 4.5% (chance) | 15.1225 |
+
+  The earlier "8-17%" result was an lr=1e-3 artifact, but the opposite extreme
+  is equally wrong: one seed learns perfect routing to H32, one collapses at H4.
+  What is stable across all three seeds is the *metric* error: MAE = c*H with
+  c = 0.4455 / 0.4533 / 0.4726. Every s->t path has exactly H edges, so this is
+  a single per-edge constant offset: the payload loss identifies only the
+  *ordering* of edge costs; their scale is never identified. Routing needs only
+  the order, so it emerges when the ordering is learned correctly -- and the
+  seed decides whether it is.
+- **Index-order artifact: rejected.** With train *and* eval node-permuted (so
+  node index carries no information), st stays 100% at H32 (MAE 0.131), and
+  st_hardcore is 99.3 / 93.0 / 85.5 / 57.0% at H4/8/16/32 -- within the seed
+  spread above, and now explained by seed 1's genuine 100%: the tropical argmin
+  tie-break over low spine indices is not what produced the accuracy.
+- **Warm-start + tau anneal does not rescue hardcore.** 30% H=1 warmup plus
+  tau 2.0 -> 0.05 gives 21-26% flat across H. The cold-start deadlock hypothesis
+  is not supported in this form; a tau=2.0 start erases the cost-ordering signal
+  early, which is worse than the plain lr=3e-3 schedule.
+
+Net: "line 1 needs explicit D supervision" is half right, but the sharper
+statement is an *identifiability* one. The payload loss identifies only the edge
+cost ordering, so routing can emerge without D supervision -- but reliably only
+with it: 1/3 seeds reaches 100% at H32, 1/3 decays, 1/3 is at chance by H16.
+The metric is never identified (constant per-hop offset at every seed).
+D supervision removes both the scale freedom and the seed lottery: seeds 0/1
+are both 100% at H32 with dist MAE 0.0005 / 0.0001. The engine is an explicit
+mathematical invariant (tropical closure + SO(3) composition), not a generic
+black-box loop -- the ablations say so.
+
+### 7.2 Toy 2 — primal-dual solver, and why the learned verifier fails
+
+- **AUROC scope verified.** AUROC is per constraint unit (18 Sudoku row/col/box
+  units), on held-out solution grids; labels are the analytic validity of the
+  *hard* prediction, scores are the model's V. It is not evidence of learning:
+  an untrained encoder with the same analytic solver scores 0.972-0.999, and
+  agreement with ground-truth unit localisation is 0.93-0.97. The 0.996 is a
+  property of the hand-written residual.
+- **Untrained-encoder control kills the learned-gain claim.** Three untrained
+  inits (seeds 0/1/2): acc(T8) 43.1 / 47.2 / 46.4% (mean 45.5), acc(T64) 77.6 /
+  76.8 / 74.8% (mean 76.4), full grid 10.7 / 9.5 / 16.0%.
+  Trained `full`, same three seeds: T8 47.5 / 46.5 / 47.5% (mean 47.2), T64
+  73.4 / 75.0 / 77.2% (mean 75.2), full grid 7.1 / 9.5 / 12.0% (mean 9.6).
+  Training buys +1.6pt at T8, -1.2pt at T64 and -2.5pt on full grids -- all
+  inside the seed spread. **The earlier "short-horizon training poisons
+  long-horizon convergence" (T8 +4.45, T64 -4.13) was an artefact of n=1 plus
+  a low untrained baseline seed; it does not survive three seeds.** What
+  survives is the absence of any learned gain at every horizon.
+- **The old 1.55 was not retention.** True retention P(board@64 | board@8) is
+  undefined because zero boards are fully correct at T8; 1.55 was acc(T64)/acc(T8).
+- **Protocol A (learned NeuralV, untrained encoder).** Solver cells T8 18.0% ->
+  T64 18.2%, full grid 0% at every T; verifier AUROC 0.62-0.69. Passes the
+  solver pre-check (T64 <= 25%) but not the 0.45-0.55 AUROC window -- one-hot
+  unit inputs make even a random MLP partially discriminative, so that window
+  was mis-specified for this encoding.
+- **Protocol B (V trained 800 steps on 2-cell hard negatives, encoder frozen).**
+  Held-out board AUROC 1.0 (E_pos 0.031 vs E_neg 1.28), yet the solver is flat:
+  T4 27.9 -> T8 31.2 -> T64 29.5%, full grid 0% at every T. A nearly perfect
+  discriminator is a poor optimisation landscape: a margin-trained scalar
+  energy has no gradient structure that points downhill, so extra iterations
+  add nothing. Verifier accuracy is not the same as a usable energy.
+
+Net: toy 2 as constructed measures the analytic primal-dual solver. The
+"learned constraint inversion" claim is not supported by either analytic-V or
+neural-V evidence; the missing ingredient is a V trained for *descent*, not for
+classification.
+
+### 7.3 Implication for the fork
+
+Line 1 survives. Line 2's learned-V claim does not, in the form tested. The
+natural next architecture is therefore **neural compiler + exact differentiable
+algebra engine**: learn the map from problem tokens to operator inputs (costs,
+constraint sets), because that is where the payload/verification losses do
+identify an ordering, and keep the semiring closure / primal-dual execution
+explicit and exact.
